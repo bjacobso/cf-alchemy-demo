@@ -26,21 +26,27 @@ const app = await alchemy("alchemy-do-demo", {
     }),
 });
 
-// Define the Durable Object namespace
+// Define the Durable Object namespaces
 const counter = DurableObjectNamespace("counter", {
   className: "Counter",
   sqlite: true,
 });
 
+const semaphore = DurableObjectNamespace("semaphore", {
+  className: "Semaphore",
+  sqlite: true,
+})
+
 // Worker name includes stage to avoid conflicts between environments
 const workerName = stage === "prod" ? "alchemy-do-demo" : `alchemy-do-demo-${stage}`;
 
-// Define the Worker with DO binding
+// Define the Worker with DO bindings
 export const worker = await Worker("worker", {
   name: workerName,
   entrypoint: "./src/index.ts",
   bindings: {
     COUNTER: counter,
+    SEMAPHORE: semaphore,
   },
 });
 
