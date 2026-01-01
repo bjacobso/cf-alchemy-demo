@@ -4,7 +4,7 @@
   "type": "module",
   "scripts": {
     "postinstall": "ln -sf ../../../libsodium/dist/modules-esm/libsodium.mjs node_modules/libsodium-wrappers/dist/modules-esm/libsodium.mjs 2>/dev/null || true",
-    "dev": "npx tsx alchemy.run.ts",
+    "dev": "STAGE=$(git rev-parse --abbrev-ref HEAD) npx tsx alchemy.run.ts",
     "deploy": "npx tsx alchemy.run.ts",
     "lint": "oxlint",
     "lint:fix": "oxlint --fix",
