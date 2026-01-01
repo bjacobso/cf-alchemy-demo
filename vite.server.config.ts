@@ -1,5 +1,5 @@
-import { defineConfig } from "vite"
-import react from "@vitejs/plugin-react"
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
 
 // Server bundle configuration for Cloudflare Workers SSR
 // This creates the SSR render function that runs in the Worker
@@ -20,4 +20,4 @@ export default defineConfig({
     target: "webworker", // Tell Vite this is for webworker environment (not Node)
     noExternal: true, // Bundle everything - Workers can't resolve node_modules at runtime
   },
-})
+});

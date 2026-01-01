@@ -15,29 +15,27 @@
  * otherwise React will warn about hydration mismatches and may re-render.
  */
 
-import { hydrateRoot } from "react-dom/client"
-import { App, type AppProps } from "./components/App"
+import { hydrateRoot } from "react-dom/client";
+import { App, type AppProps } from "./components/App";
 
 // Type declaration for the props bridge
 // The server embeds props as: <script>window.__INITIAL_PROPS__ = {...}</script>
 declare global {
   interface Window {
-    __INITIAL_PROPS__: AppProps
+    __INITIAL_PROPS__: AppProps;
   }
 }
 
 // Get the props that were serialized into the HTML
-const props = window.__INITIAL_PROPS__
+const props = window.__INITIAL_PROPS__;
 
 // Find the root element where the server rendered the app
-const rootElement = document.getElementById("root")
+const rootElement = document.getElementById("root");
 
 if (!rootElement) {
-  throw new Error(
-    "Root element not found. Make sure the server renders a <div id=\"root\">",
-  )
+  throw new Error('Root element not found. Make sure the server renders a <div id="root">');
 }
 
 // Hydrate - attach React to the existing DOM
 // This is different from createRoot().render() which would blow away the DOM
-hydrateRoot(rootElement, <App {...props} />)
+hydrateRoot(rootElement, <App {...props} />);

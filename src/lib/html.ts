@@ -18,16 +18,16 @@
  * from a CDN with proper caching headers.
  */
 
-import { tailwindCSS } from "../styles/tailwind.generated"
-import { clientBundle } from "./client-bundle.generated"
+import { tailwindCSS } from "../styles/tailwind.generated";
+import { clientBundle } from "./client-bundle.generated";
 
 interface CreateHtmlDocumentOptions {
   /** Page title for <title> tag */
-  title: string
+  title: string;
   /** React-rendered HTML string from renderToString() */
-  appHtml: string
+  appHtml: string;
   /** Props to serialize for client hydration */
-  props: Record<string, unknown>
+  props: Record<string, unknown>;
 }
 
 /**
@@ -36,11 +36,8 @@ interface CreateHtmlDocumentOptions {
 function escapeHtml(str: string): string {
   return str.replace(
     /[&<>"']/g,
-    (c) =>
-      ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[
-        c
-      ]!,
-  )
+    (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]!,
+  );
 }
 
 /**
@@ -53,17 +50,13 @@ function escapeHtml(str: string): string {
  *   props: { count: 5 }
  * })
  */
-export function createHtmlDocument({
-  title,
-  appHtml,
-  props,
-}: CreateHtmlDocumentOptions): string {
+export function createHtmlDocument({ title, appHtml, props }: CreateHtmlDocumentOptions): string {
   // Serialize props for the client
   // IMPORTANT: We must escape < and > to prevent XSS attacks
   // A malicious count like "</script><script>alert('xss')" would break out
   const safeProps = JSON.stringify(props)
     .replace(/</g, "\\u003c") // Escape < to prevent </script> injection
-    .replace(/>/g, "\\u003e") // Escape > for completeness
+    .replace(/>/g, "\\u003e"); // Escape > for completeness
 
   return `<!DOCTYPE html>
 <html lang="en">
@@ -82,5 +75,5 @@ export function createHtmlDocument({
     <div id="root">${appHtml}</div>
     <script type="module">${clientBundle}</script>
   </body>
-</html>`
+</html>`;
 }

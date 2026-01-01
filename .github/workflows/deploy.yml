@@ -32,8 +32,8 @@ jobs:
           cache: "pnpm"
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
-      - name: Build CSS
-        run: pnpm build:css
+      - name: Build
+        run: pnpm build
       - name: Deploy to ${{ env.STAGE }} stage
         run: pnpm exec tsx alchemy.run.ts
         env:

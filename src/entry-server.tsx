@@ -9,8 +9,8 @@
  * loads the client bundle for hydration.
  */
 
-import { renderToString } from "react-dom/server"
-import { App, type AppProps } from "./components/App"
+import { renderToString } from "react-dom/server";
+import { App, type AppProps } from "./components/App";
 
 /**
  * Render the React app to an HTML string for SSR
@@ -23,8 +23,8 @@ import { App, type AppProps } from "./components/App"
  * // Returns: '<div class="..."><div class="text-6xl">5</div>...</div>'
  */
 export function render(props: AppProps): string {
-  return renderToString(<App {...props} />)
+  return renderToString(<App {...props} />);
 }
 
 // Re-export types for use in handlers
-export type { AppProps }
+export type { AppProps };

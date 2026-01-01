@@ -1,5 +1,5 @@
-import { defineConfig } from "vite"
-import react from "@vitejs/plugin-react"
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
 
 // Client bundle configuration
 // This creates the JavaScript that runs in the browser for hydration
@@ -17,4 +17,4 @@ export default defineConfig({
       },
     },
   },
-})
+});
