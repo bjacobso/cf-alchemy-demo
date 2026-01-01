@@ -37,6 +37,11 @@ const workflowExecution = DurableObjectNamespace("workflow-execution", {
   sqlite: true,
 })
 
+const workflowIndex = DurableObjectNamespace("workflow-index", {
+  className: "WorkflowIndex",
+  sqlite: true,
+})
+
 // Worker name includes stage to avoid conflicts between environments
 const workerName =
   stage === "prod" ? "alchemy-do-demo" : `alchemy-do-demo-${stage}`
@@ -48,6 +53,7 @@ export const worker = await Worker("worker", {
   bindings: {
     COUNTER: counter,
     WORKFLOW_EXECUTION: workflowExecution,
+    WORKFLOW_INDEX: workflowIndex,
   },
 })
 

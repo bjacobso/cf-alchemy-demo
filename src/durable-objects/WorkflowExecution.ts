@@ -1,5 +1,6 @@
 import { DurableObject } from "cloudflare:workers"
 import type { Env } from "../services/CloudflareEnv"
+import type { WorkflowIndex, IndexEntry } from "./WorkflowIndex"
 
 // Workflow execution state persisted in DO storage
 interface ExecutionState {
@@ -60,6 +61,19 @@ export class WorkflowExecution extends DurableObject<Env> {
     await this.ctx.storage.put("state", state)
   }
 
+  // Get the global WorkflowIndex stub
+  private getIndexStub(): DurableObjectStub<WorkflowIndex> {
+    return this.env.WORKFLOW_INDEX.get(
+      this.env.WORKFLOW_INDEX.idFromName("global")
+    )
+  }
+
+  // Notify the index of a status change
+  private async notifyIndex(state: ExecutionState): Promise<void> {
+    const indexStub = this.getIndexStub()
+    await indexStub.updateStatus(state.executionId, state.status)
+  }
+
   // ========== Initialization ==========
 
   async execute(
@@ -73,15 +87,26 @@ export class WorkflowExecution extends DurableObject<Env> {
       return
     }
 
+    const now = Date.now()
     const state: ExecutionState = {
       executionId,
       workflowName,
       status: "running",
       payload,
-      createdAt: Date.now(),
-      updatedAt: Date.now(),
+      createdAt: now,
+      updatedAt: now,
     }
     await this.setState(state)
+
+    // Register with the global index
+    const indexStub = this.getIndexStub()
+    await indexStub.register({
+      executionId,
+      workflowName,
+      status: "running",
+      createdAt: now,
+      updatedAt: now,
+    })
   }
 
   // ========== Status Methods ==========
@@ -105,6 +130,7 @@ export class WorkflowExecution extends DurableObject<Env> {
 
     state.status = "interrupted"
     await this.setState(state)
+    await this.notifyIndex(state)
   }
 
   async resume(): Promise<void> {
@@ -114,6 +140,7 @@ export class WorkflowExecution extends DurableObject<Env> {
     if (state.status === "suspended") {
       state.status = "running"
       await this.setState(state)
+      await this.notifyIndex(state)
     }
   }
 
@@ -124,6 +151,7 @@ export class WorkflowExecution extends DurableObject<Env> {
     state.status = "done"
     state.result = result
     await this.setState(state)
+    await this.notifyIndex(state)
   }
 
   async fail(error: unknown): Promise<void> {
@@ -133,6 +161,7 @@ export class WorkflowExecution extends DurableObject<Env> {
     state.status = "failed"
     state.error = error
     await this.setState(state)
+    await this.notifyIndex(state)
   }
 
   async suspend(): Promise<void> {
@@ -141,6 +170,7 @@ export class WorkflowExecution extends DurableObject<Env> {
 
     state.status = "suspended"
     await this.setState(state)
+    await this.notifyIndex(state)
   }
 
   // ========== Activity Methods ==========
