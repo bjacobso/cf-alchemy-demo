@@ -17,10 +17,11 @@
     "test:e2e:headed": "playwright test --headed"
   },
   "dependencies": {
-    "@effect/platform": "^0.77",
+    "@effect/platform": "^0.94.1",
+    "@effect/workflow": "^0.16.0",
     "alchemy": "latest",
     "dotenv": "^17.2.3",
-    "effect": "^3.12",
+    "effect": "^3.19.14",
     "libsodium": "^0.7.16"
   },
   "devDependencies": {

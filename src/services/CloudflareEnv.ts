@@ -1,9 +1,11 @@
 import { Context, Layer } from "effect"
 import type { Counter } from "../durable-objects/Counter"
+import type { WorkflowExecution } from "../durable-objects/WorkflowExecution"
 
 // Cloudflare Worker environment bindings
 export interface Env {
   COUNTER: DurableObjectNamespace<Counter>
+  WORKFLOW_EXECUTION: DurableObjectNamespace<WorkflowExecution>
 }
 
 // Effect Context.Tag for accessing Cloudflare env bindings
