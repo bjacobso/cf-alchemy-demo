@@ -1,11 +1,11 @@
 // @ts-nocheck - Legacy custom JSX component, not type-checked with React types
 /** @jsx jsx */
 /** @jsxFrag Fragment */
-import { jsx, Fragment, RawHtml } from "../jsx-runtime"
-import { Layout } from "./Layout"
+import { jsx, Fragment, RawHtml } from "../jsx-runtime";
+import { Layout } from "./Layout";
 
 interface CounterProps {
-  count: number
+  count: number;
 }
 
 export function Counter({ count }: CounterProps): RawHtml {
@@ -18,12 +18,11 @@ export function Counter({ count }: CounterProps): RawHtml {
               Meta Framework from First Principles
             </h1>
             <p className="text-gray-600 text-sm">
-              Building a complete web application without React, Next.js, or
-              traditional frameworks.
+              Building a complete web application without React, Next.js, or traditional frameworks.
             </p>
             <p className="text-gray-500 text-xs mt-2">
-              Custom JSX runtime (~100 lines) • Server-side TSX • Cloudflare
-              Durable Objects • No client JavaScript
+              Custom JSX runtime (~100 lines) • Server-side TSX • Cloudflare Durable Objects • No
+              client JavaScript
             </p>
           </div>
           <h2 className="text-2xl font-bold text-gray-800">Counter</h2>
@@ -54,5 +53,5 @@ export function Counter({ count }: CounterProps): RawHtml {
         }}
       />
     </Layout>
-  )
+  );
 }

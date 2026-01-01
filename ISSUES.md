@@ -11,6 +11,7 @@
 **Example:**
 
 Before formatting (correct):
+
 ```typescript
 interface ICounterService {
   readonly getCount: Effect.Effect<number>
@@ -20,6 +21,7 @@ interface ICounterService {
 ```
 
 After formatting (corrupted):
+
 ```typescript
 interface ICounterService {
   readonlygetCount: Effect.Effect<number>
@@ -29,6 +31,7 @@ interface ICounterService {
 ```
 
 **Impact:** TypeScript compilation fails with errors like:
+
 ```
 Property 'getCount' does not exist on type 'ICounterService'.
 ```

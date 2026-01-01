@@ -1,12 +1,12 @@
 // @ts-nocheck - Legacy custom JSX component, not type-checked with React types
 /** @jsx jsx */
 /** @jsxFrag Fragment */
-import { jsx, Fragment, RawHtml } from "../jsx-runtime"
-import { tailwindCSS } from "../styles/tailwind.generated"
+import { jsx, Fragment, RawHtml } from "../jsx-runtime";
+import { tailwindCSS } from "../styles/tailwind.generated";
 
 interface LayoutProps {
-  title: string
-  children?: RawHtml | RawHtml[]
+  title: string;
+  children?: RawHtml | RawHtml[];
 }
 
 export function Layout({ title, children }: LayoutProps): RawHtml {
@@ -20,5 +20,5 @@ export function Layout({ title, children }: LayoutProps): RawHtml {
       </head>
       <body>{children}</body>
     </html>
-  )
+  );
 }
