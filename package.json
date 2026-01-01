@@ -16,7 +16,9 @@
     "test:e2e:headed": "playwright test --headed"
   },
   "dependencies": {
+    "@effect/platform": "^0.77",
     "alchemy": "latest",
+    "effect": "^3.12",
     "libsodium": "^0.7.16"
   },
   "devDependencies": {

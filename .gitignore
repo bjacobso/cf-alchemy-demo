@@ -22,6 +22,7 @@ node_modules/
 # Build
 dist/
 .wrangler/
+wrangler.jsonc
 
 # Playwright
 test-results/
