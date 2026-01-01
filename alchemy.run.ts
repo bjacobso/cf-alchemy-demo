@@ -37,7 +37,7 @@ console.log(`Deployed worker: ${worker.url}`)
 // Post PR comment with preview URL
 if (process.env.PULL_REQUEST) {
   await GitHubComment("preview-comment", {
-    owner: "benjacobson",
+    owner: "bjacobso",
     repository: "cf-alchemy-demo",
     issueNumber: Number(process.env.PULL_REQUEST),
     body: `## Preview Deployed
