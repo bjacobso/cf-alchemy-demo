@@ -41,7 +41,7 @@ export class Counter extends DurableObject<Env> {
       Effect.gen(function* () {
         const sql = yield* SqlClient.SqlClient
         const rows = yield* sql`SELECT value FROM counter WHERE id = 'default'`
-        return (rows[0]?.value as number) ?? 0
+        return rows[0]?.value as number ?? 0
       }),
     )
   }
