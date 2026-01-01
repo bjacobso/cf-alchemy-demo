@@ -1,22 +1,22 @@
-import "dotenv/config"
-import { execSync } from "child_process"
-import alchemy from "alchemy"
-import { Worker, DurableObjectNamespace } from "alchemy/cloudflare"
-import { CloudflareStateStore } from "alchemy/state"
-import { GitHubComment } from "alchemy/github"
+import "dotenv/config";
+import { execSync } from "child_process";
+import alchemy from "alchemy";
+import { Worker, DurableObjectNamespace } from "alchemy/cloudflare";
+import { CloudflareStateStore } from "alchemy/state";
+import { GitHubComment } from "alchemy/github";
 
-let branch = ""
+let branch = "";
 try {
   branch = execSync("git rev-parse --abbrev-ref HEAD", {
     encoding: "utf-8",
-  }).trim()
+  }).trim();
 } catch {
   // Not in a git repo or git not available
 }
 
 // Sanitize branch name for Cloudflare worker names (replace / with -)
-const sanitizedBranch = branch.replace(/\//g, "-")
-const stage = process.env.STAGE || sanitizedBranch || "dev"
+const sanitizedBranch = branch.replace(/\//g, "-");
+const stage = process.env.STAGE || sanitizedBranch || "dev";
 
 const app = await alchemy("alchemy-do-demo", {
   stage,
@@ -24,13 +24,13 @@ const app = await alchemy("alchemy-do-demo", {
     new CloudflareStateStore(scope, {
       forceUpdate: true,
     }),
-})
+});
 
 // Define the Durable Object namespaces
 const counter = DurableObjectNamespace("counter", {
   className: "Counter",
   sqlite: true,
-})
+});
 
 const workflowExecution = DurableObjectNamespace("workflow-execution", {
   className: "WorkflowExecution",
@@ -43,8 +43,7 @@ const workflowIndex = DurableObjectNamespace("workflow-index", {
 })
 
 // Worker name includes stage to avoid conflicts between environments
-const workerName =
-  stage === "prod" ? "alchemy-do-demo" : `alchemy-do-demo-${stage}`
+const workerName = stage === "prod" ? "alchemy-do-demo" : `alchemy-do-demo-${stage}`;
 
 // Define the Worker with DO bindings
 export const worker = await Worker("worker", {
@@ -55,9 +54,9 @@ export const worker = await Worker("worker", {
     WORKFLOW_EXECUTION: workflowExecution,
     WORKFLOW_INDEX: workflowIndex,
   },
-})
+});
 
-console.log(`Deployed worker: ${worker.url}`)
+console.log(`Deployed worker: ${worker.url}`);
 
 // Post PR comment with preview URL
 if (process.env.PULL_REQUEST) {
@@ -75,7 +74,7 @@ Built from commit ${process.env.GITHUB_SHA?.slice(0, 7)}
 <time datetime="${new Date().toISOString()}">${new Date().toISOString()}</time>
 
 <sub>This comment updates automatically with each push.</sub>`,
-  })
+  });
 }
 
-await app.finalize()
+await app.finalize();

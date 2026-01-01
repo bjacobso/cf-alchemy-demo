@@ -4,8 +4,8 @@ set -e  # Exit on error
 echo "Setting up workspace..."
 
 # Install dependencies
-echo "Installing npm dependencies..."
-npm install
+echo "Installing pnpm dependencies..."
+pnpm install
 
 # Copy environment file from Conductor root
 echo "Copying .env from Conductor root..."
