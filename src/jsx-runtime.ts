@@ -9,6 +9,10 @@ export class RawHtml {
 type Child = RawHtml | string | number | boolean | null | undefined | Child[]
 type Props = Record<string, unknown> & { children?: Child }
 
+// Type alias to avoid oxfmt corruption of function types in unions
+type ComponentFn = (props: Props) => RawHtml
+type JsxType = string | ComponentFn
+
 // JSX namespace for TypeScript
 declare global {
   namespace JSX {
@@ -23,7 +27,7 @@ function raw(html: string): RawHtml {
   return new RawHtml(html)
 }
 
-function isRaw(value: unknown): {
+function isRaw(value: unknown): boolean {
   return value instanceof RawHtml
 }
 
@@ -56,12 +60,12 @@ function escapeHtml(str: string): string {
 function renderChildren(children: Child): string {
   if (children == null || children === false) return ""
   if (Array.isArray(children)) return children.map(renderChildren).join("")
-  if (isRaw(children)) return children.html // Already rendered HTML
+  if (isRaw(children)) return (children as RawHtml).html
   return escapeHtml(String(children))
 }
 
 export function jsx(
-  type: string | (props: Props) => RawHtml,
+  type: JsxType,
   props: Props | null,
   ...children: Child[]
 ): RawHtml {
