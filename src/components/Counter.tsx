@@ -9,8 +9,21 @@ export function Counter({ count }: CounterProps): RawHtml {
   return (
     <Layout title="Counter">
       <div className="flex justify-center items-center min-h-screen bg-gray-100">
-        <div className="text-center bg-white py-8 px-12 rounded-lg shadow-lg">
-          <h1 className="text-2xl font-bold text-gray-800">Counter</h1>
+        <div className="text-center bg-white py-8 px-12 rounded-lg shadow-lg max-w-2xl mx-4">
+          <div className="mb-6 pb-6 border-b border-gray-200">
+            <h1 className="text-3xl font-bold text-gray-800 mb-3">
+              Meta Framework from First Principles
+            </h1>
+            <p className="text-gray-600 text-sm">
+              Building a complete web application without React, Next.js, or
+              traditional frameworks.
+            </p>
+            <p className="text-gray-500 text-xs mt-2">
+              Custom JSX runtime (~100 lines) • Server-side TSX • Cloudflare
+              Durable Objects • No client JavaScript
+            </p>
+          </div>
+          <h2 className="text-2xl font-bold text-gray-800">Counter</h2>
           <div className="text-6xl font-bold my-4">{count}</div>
           <div className="flex gap-4 justify-center">
             <form method="post" action="/decrement" className="inline">
