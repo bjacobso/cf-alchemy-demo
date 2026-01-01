@@ -9,5 +9,12 @@ class CounterGroup extends HttpApiGroup.make("counter")
     HttpApiEndpoint.post("decrement", "/decrement").addSuccess(Schema.Void),
   ) {}
 
+// Docs API group - serves OpenAPI documentation
+class DocsGroup extends HttpApiGroup.make("docs").add(
+  HttpApiEndpoint.get("getDocs", "/docs").addSuccess(Schema.String),
+) {}
+
 // Top-level API definition combining all groups
-export class AppApi extends HttpApi.make("app").add(CounterGroup) {}
+export class AppApi extends HttpApi.make("app")
+  .add(CounterGroup)
+  .add(DocsGroup) {}
