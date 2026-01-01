@@ -3,8 +3,14 @@ import { Worker, DurableObjectNamespace } from "alchemy/cloudflare"
 import { CloudflareStateStore } from "alchemy/state"
 import { GitHubComment } from "alchemy/github"
 
+const stage = process.env.STAGE || "dev"
+
 const app = await alchemy("alchemy-do-demo", {
-  stateStore: (scope) => new CloudflareStateStore(scope),
+  stage,
+  stateStore: (scope) =>
+    new CloudflareStateStore(scope, {
+      forceUpdate: true,
+    }),
 })
 
 // Define the Durable Object namespace
@@ -13,9 +19,13 @@ const counter = DurableObjectNamespace("counter", {
   sqlite: true,
 })
 
+// Worker name includes stage to avoid conflicts between environments
+const workerName =
+  stage === "prod" ? "alchemy-do-demo" : `alchemy-do-demo-${stage}`
+
 // Define the Worker with DO binding
 export const worker = await Worker("worker", {
-  name: "alchemy-do-demo",
+  name: workerName,
   entrypoint: "./src/index.ts",
   bindings: {
     COUNTER: counter,
