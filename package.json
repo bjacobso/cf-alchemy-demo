@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "postinstall": "ln -sf ../../../libsodium/dist/modules-esm/libsodium.mjs node_modules/libsodium-wrappers/dist/modules-esm/libsodium.mjs 2>/dev/null || true",
+    "postinstall": "bash -c 'src=$(echo node_modules/.pnpm/libsodium@*/node_modules/libsodium/dist/modules-esm/libsodium.mjs) && dst=$(echo node_modules/.pnpm/libsodium-wrappers@*/node_modules/libsodium-wrappers/dist/modules-esm) && cp \"$src\" \"$dst/libsodium.mjs\"' 2>/dev/null || true",
     "build:css": "pnpm exec tsx scripts/build-css.ts",
     "dev": "pnpm build:css && pnpm exec tsx alchemy.run.ts",
     "deploy": "pnpm build:css && pnpm exec tsx alchemy.run.ts",
