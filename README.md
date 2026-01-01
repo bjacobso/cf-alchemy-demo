@@ -1,18 +1,72 @@
-# Alchemy DO Demo
+# Meta Framework from First Principles
 
-A minimal Cloudflare Worker + Durable Object project using [Alchemy](https://alchemy.run).
+Building a complete web application without React, Next.js, or traditional frameworks.
 
-## Features
+## What This Demonstrates
 
-- Counter Durable Object with increment/decrement endpoints
-- PR preview deploys with stage naming (`pr-<number>`)
-- GitHub PR comments with preview URLs
-- Automatic cleanup when PRs are closed
+- **Custom JSX runtime** (~100 lines) that renders directly to HTML strings
+- **Server-side TSX without React** - JSX is just TypeScript compilation
+- **Cloudflare Durable Objects** for stateful serverless
+- **Traditional web patterns** - forms, POST/redirect/GET, no client JavaScript
+- **Declarative infrastructure** with [Alchemy](https://alchemy.run)
+
+## The Stack
+
+| What | How |
+|------|-----|
+| JSX → HTML | Custom `jsx()` factory in [`src/jsx-runtime.ts`](src/jsx-runtime.ts) |
+| Server | Cloudflare Durable Object |
+| State | Built-in DO storage (no database) |
+| Routing | Direct request handling |
+| Deploy | Alchemy infrastructure-as-code |
+
+## How the JSX Runtime Works
+
+JSX is just syntax sugar. TypeScript compiles `<div class="foo">hello</div>` into function calls. We provide our own `jsx()` function that renders directly to HTML strings:
+
+```typescript
+// Our custom jsx() function (simplified)
+function jsx(type, props, ...children) {
+  if (typeof type === "function") {
+    return type({ ...props, children })  // Component
+  }
+  return new RawHtml(`<${type}>${renderChildren(children)}</${type}>`)
+}
+```
+
+No virtual DOM. No diffing algorithm. No client-side hydration. Just string concatenation with HTML escaping for safety.
+
+See the full implementation: [`src/jsx-runtime.ts`](src/jsx-runtime.ts)
+
+## How Durable Objects Work
+
+A Durable Object is a stateful serverless function with built-in persistent storage:
+
+```typescript
+export class Counter extends DurableObject<Env> {
+  async fetch(request: Request) {
+    // Load state
+    const count = await this.ctx.storage.get<number>("count") ?? 0
+
+    // Handle POST (form submission)
+    if (request.method === "POST") {
+      await this.ctx.storage.put("count", count + 1)
+      return Response.redirect("/")  // POST/redirect/GET
+    }
+
+    // Render page with TSX
+    return new Response(CounterPage({ count }), {
+      headers: { "Content-Type": "text/html" }
+    })
+  }
+}
+```
+
+No database setup. No ORM. State lives in the Durable Object.
 
 ## Local Setup
 
 ```bash
-# Install dependencies
 npm install
 
 # Configure Alchemy (one-time)
@@ -22,58 +76,47 @@ npx alchemy login
 # Run local dev server
 npm run dev
 
-# Deploy to production
+# Deploy
 npm run deploy
 ```
 
 ## E2E Tests
 
-Run end-to-end tests with Playwright:
-
 ```bash
-# Install Playwright browsers (one-time)
 npx playwright install chromium
 
-# Run tests against local dev server (start dev server first)
-npm run dev  # in one terminal
-npm run test:e2e  # in another terminal
+npm run dev           # Start dev server
+npm run test:e2e      # Run tests
 
-# Or run tests against a deployed URL
+# Or test against deployed URL
 BASE_URL=https://your-worker.workers.dev npm run test:e2e
-
-# Interactive UI mode for debugging
-npm run test:e2e:ui
-
-# Run with visible browser
-npm run test:e2e:headed
 ```
 
 ## Endpoints
 
-- `GET /` - Returns current count
-- `GET /increment` - Increment and return count
-- `GET /decrement` - Decrement and return count
+- `GET /` - Render counter page
+- `POST /increment` - Increment count, redirect to /
+- `POST /decrement` - Decrement count, redirect to /
+
+## Why This Approach?
+
+| Heavy Framework | This Project |
+|-----------------|--------------|
+| React + ReactDOM | Custom 100-line JSX factory |
+| Next.js routing | Direct `fetch()` handler |
+| PostgreSQL + ORM | Durable Object storage |
+| Node.js server | Cloudflare Worker |
+| Webpack/Vite | Native ES modules |
+
+Modern web apps don't need React, Node.js, or databases. This project proves it.
 
 ## GitHub Secrets
 
-Configure these in your repository settings (Settings > Secrets and variables > Actions):
+For CI/CD deployment:
 
-| Secret | Description | How to obtain |
-|--------|-------------|---------------|
-| `ALCHEMY_PASSWORD` | Encryption password for state | Generate a secure password: `openssl rand -base64 32` |
-| `ALCHEMY_STATE_TOKEN` | State store authentication token | Generate with: `openssl rand -base64 32` |
-| `CLOUDFLARE_API_TOKEN` | Cloudflare API token | [Cloudflare Dashboard](https://dash.cloudflare.com/profile/api-tokens) > Create Token > "Edit Cloudflare Workers" template |
-| `CLOUDFLARE_EMAIL` | Cloudflare account email | Your Cloudflare login email |
-
-**Notes:**
-- `ALCHEMY_PASSWORD` and `ALCHEMY_STATE_TOKEN` must remain consistent across all deployments
-- Store these securely and never commit them to version control
-
-## CI/CD
-
-The GitHub Actions workflow automatically:
-
-- Deploys to `prod` on push to `main`
-- Creates `pr-<number>` preview environments for PRs
-- Posts/updates a PR comment with the preview URL
-- Destroys preview environments when PRs are closed
+| Secret | Description |
+|--------|-------------|
+| `ALCHEMY_PASSWORD` | Encryption password: `openssl rand -base64 32` |
+| `ALCHEMY_STATE_TOKEN` | State store token: `openssl rand -base64 32` |
+| `CLOUDFLARE_API_TOKEN` | [Create token](https://dash.cloudflare.com/profile/api-tokens) with "Edit Cloudflare Workers" |
+| `CLOUDFLARE_EMAIL` | Your Cloudflare login email |
