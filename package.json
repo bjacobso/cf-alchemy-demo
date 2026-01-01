@@ -18,6 +18,7 @@
   "dependencies": {
     "@effect/platform": "^0.77",
     "alchemy": "latest",
+    "dotenv": "^17.2.3",
     "effect": "^3.12",
     "libsodium": "^0.7.16"
   },
