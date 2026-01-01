@@ -39,7 +39,6 @@ export const ReleaseRequestSchema = Schema.Struct({
 
 // Semaphore API group - demo endpoints for the semaphore Durable Object
 export class SemaphoreGroup extends HttpApiGroup.make("semaphore")
-  .prefix("/semaphore")
   .add(HttpApiEndpoint.get("getDemoPage", "/demo").addSuccess(Schema.String))
   .add(HttpApiEndpoint.get("getStatus", "/status").addSuccess(SemaphoreStatusSchema))
   .add(
@@ -57,4 +56,5 @@ export class SemaphoreGroup extends HttpApiGroup.make("semaphore")
     HttpApiEndpoint.post("release", "/release")
       .setPayload(ReleaseRequestSchema)
       .addSuccess(Schema.Void),
-  ) {}
+  )
+  .prefix("/semaphore") {}
