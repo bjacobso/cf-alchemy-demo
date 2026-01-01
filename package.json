@@ -10,7 +10,10 @@
     "lint:fix": "oxlint --fix",
     "format": "oxfmt --write .",
     "format:check": "oxfmt --check .",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui",
+    "test:e2e:headed": "playwright test --headed"
   },
   "dependencies": {
     "alchemy": "latest",
@@ -18,6 +21,7 @@
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4",
+    "@playwright/test": "^1.40.0",
     "@types/node": "^25.0.3",
     "oxfmt": "^0.1",
     "oxlint": "^1",

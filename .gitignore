@@ -21,3 +21,8 @@ node_modules/
 # Build
 dist/
 .wrangler/
+
+# Playwright
+test-results/
+playwright-report/
+playwright/.cache/

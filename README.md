@@ -26,6 +26,28 @@ npm run dev
 npm run deploy
 ```
 
+## E2E Tests
+
+Run end-to-end tests with Playwright:
+
+```bash
+# Install Playwright browsers (one-time)
+npx playwright install chromium
+
+# Run tests against local dev server (start dev server first)
+npm run dev  # in one terminal
+npm run test:e2e  # in another terminal
+
+# Or run tests against a deployed URL
+BASE_URL=https://your-worker.workers.dev npm run test:e2e
+
+# Interactive UI mode for debugging
+npm run test:e2e:ui
+
+# Run with visible browser
+npm run test:e2e:headed
+```
+
 ## Endpoints
 
 - `GET /` - Returns current count
