@@ -1,9 +1,21 @@
+import { execSync } from "child_process"
 import alchemy from "alchemy"
 import { Worker, DurableObjectNamespace } from "alchemy/cloudflare"
 import { CloudflareStateStore } from "alchemy/state"
 import { GitHubComment } from "alchemy/github"
 
-const stage = process.env.STAGE || "dev"
+let branch = ""
+try {
+  branch = execSync("git rev-parse --abbrev-ref HEAD", {
+    encoding: "utf-8",
+  }).trim()
+} catch {
+  // Not in a git repo or git not available
+}
+
+// Sanitize branch name for Cloudflare worker names (replace / with -)
+const sanitizedBranch = branch.replace(/\//g, "-")
+const stage = process.env.STAGE || sanitizedBranch || "dev"
 
 const app = await alchemy("alchemy-do-demo", {
   stage,
