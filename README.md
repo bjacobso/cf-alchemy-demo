@@ -36,12 +36,16 @@ npm run deploy
 
 Configure these in your repository settings (Settings > Secrets and variables > Actions):
 
-| Secret | Description |
-|--------|-------------|
-| `ALCHEMY_PASSWORD` | Alchemy encryption password |
-| `ALCHEMY_STATE_TOKEN` | Alchemy state store token |
-| `CLOUDFLARE_API_TOKEN` | Cloudflare API token |
-| `CLOUDFLARE_EMAIL` | Cloudflare account email |
+| Secret | Description | How to obtain |
+|--------|-------------|---------------|
+| `ALCHEMY_PASSWORD` | Encryption password for state | Generate a secure password: `openssl rand -base64 32` |
+| `ALCHEMY_STATE_TOKEN` | State store authentication token | Generate with: `openssl rand -base64 32` |
+| `CLOUDFLARE_API_TOKEN` | Cloudflare API token | [Cloudflare Dashboard](https://dash.cloudflare.com/profile/api-tokens) > Create Token > "Edit Cloudflare Workers" template |
+| `CLOUDFLARE_EMAIL` | Cloudflare account email | Your Cloudflare login email |
+
+**Notes:**
+- `ALCHEMY_PASSWORD` and `ALCHEMY_STATE_TOKEN` must remain consistent across all deployments
+- Store these securely and never commit them to version control
 
 ## CI/CD
 
