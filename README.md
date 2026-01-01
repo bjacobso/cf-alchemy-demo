@@ -67,29 +67,29 @@ No database setup. No ORM. State lives in the Durable Object.
 ## Local Setup
 
 ```bash
-npm install
+pnpm install
 
 # Configure Alchemy (one-time)
-npx alchemy configure
-npx alchemy login
+pnpm exec alchemy configure
+pnpm exec alchemy login
 
 # Run local dev server
-npm run dev
+pnpm dev
 
 # Deploy
-npm run deploy
+pnpm deploy
 ```
 
 ## E2E Tests
 
 ```bash
-npx playwright install chromium
+pnpm exec playwright install chromium
 
-npm run dev           # Start dev server
-npm run test:e2e      # Run tests
+pnpm dev           # Start dev server
+pnpm test:e2e      # Run tests
 
 # Or test against deployed URL
-BASE_URL=https://your-worker.workers.dev npm run test:e2e
+BASE_URL=https://your-worker.workers.dev pnpm test:e2e
 ```
 
 ## Endpoints

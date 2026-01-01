@@ -10,7 +10,7 @@ mkdirSync(dirname(OUTPUT_CSS), { recursive: true });
 
 // Run Tailwind CLI
 console.log("Compiling Tailwind CSS...");
-execSync(`npx @tailwindcss/cli -i src/styles/tailwind.css -o ${OUTPUT_CSS} --minify`, {
+execSync(`pnpm exec tailwindcss -i src/styles/tailwind.css -o ${OUTPUT_CSS} --minify`, {
   stdio: "inherit",
 });
 
