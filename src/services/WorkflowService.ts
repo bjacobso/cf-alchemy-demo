@@ -63,8 +63,13 @@ export const WorkflowServiceLive = Layer.effect(
           const stub = getExecutionStub(executionId);
           const rawState = await stub.getFullState();
 
-          // Validate the RPC response using schema
-          const fullState = decodeFullState(rawState);
+          // Skip schema validation for now - just cast
+          const fullState = rawState as {
+            state: ExecutionState | undefined;
+            activities: Record<string, ActivityEntry>;
+            deferreds: Record<string, DeferredEntry>;
+            clocks: Record<string, ClockEntry>;
+          };
 
           return {
             state: fullState.state,

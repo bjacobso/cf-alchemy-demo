@@ -305,34 +305,34 @@ export class WorkflowExecution extends DurableObject<Env> {
 
   async getFullState(): Promise<{
     state: ExecutionState | undefined;
-    activities: Map<string, ActivityEntry>;
-    deferreds: Map<string, DeferredEntry>;
-    clocks: Map<string, ClockEntry>;
+    activities: Record<string, ActivityEntry>;
+    deferreds: Record<string, DeferredEntry>;
+    clocks: Record<string, ClockEntry>;
   }> {
     const state = await this.getState();
-    const activities = new Map<string, ActivityEntry>();
-    const deferreds = new Map<string, DeferredEntry>();
-    const clocks = new Map<string, ClockEntry>();
+    const activities: Record<string, ActivityEntry> = {};
+    const deferreds: Record<string, DeferredEntry> = {};
+    const clocks: Record<string, ClockEntry> = {};
 
     const activityEntries = await this.ctx.storage.list<unknown>({
       prefix: "activity:",
     });
     for (const [key, entry] of activityEntries) {
-      activities.set(key.replace("activity:", ""), decodeActivityEntry(entry));
+      activities[key.replace("activity:", "")] = decodeActivityEntry(entry);
     }
 
     const deferredEntries = await this.ctx.storage.list<unknown>({
       prefix: "deferred:",
     });
     for (const [key, entry] of deferredEntries) {
-      deferreds.set(key.replace("deferred:", ""), decodeDeferredEntry(entry));
+      deferreds[key.replace("deferred:", "")] = decodeDeferredEntry(entry);
     }
 
     const clockEntries = await this.ctx.storage.list<unknown>({
       prefix: "clock:",
     });
     for (const [key, entry] of clockEntries) {
-      clocks.set(key.replace("clock:", ""), decodeClockEntry(entry));
+      clocks[key.replace("clock:", "")] = decodeClockEntry(entry);
     }
 
     return { state, activities, deferreds, clocks };

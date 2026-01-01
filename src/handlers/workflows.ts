@@ -72,9 +72,8 @@ export const WorkflowsHandlerLive = HttpApiBuilder.group(AppApi, "workflows", (h
     .handleRaw("getExecution", ({ request }) =>
       Effect.gen(function* () {
         const workflowService = yield* WorkflowService;
-        // Extract executionId from URL path
-        const url = new URL(request.url);
-        const pathParts = url.pathname.split("/");
+        // Extract executionId from URL path - request.url is just the path
+        const pathParts = request.url.split("/");
         const executionId = pathParts[pathParts.length - 1] ?? "";
 
         const execution = yield* workflowService.getExecution(executionId);
@@ -85,9 +84,8 @@ export const WorkflowsHandlerLive = HttpApiBuilder.group(AppApi, "workflows", (h
     .handleRaw("sendEvent", ({ request }) =>
       Effect.gen(function* () {
         const workflowService = yield* WorkflowService;
-        // Extract executionId from URL path
-        const url = new URL(request.url);
-        const pathParts = url.pathname.split("/");
+        // Extract executionId from URL path - request.url is just the path
+        const pathParts = request.url.split("/");
         // Path is /workflows/:executionId/event
         const executionId = pathParts[pathParts.length - 2] ?? "";
         const source = request.source as Request;
@@ -112,9 +110,8 @@ export const WorkflowsHandlerLive = HttpApiBuilder.group(AppApi, "workflows", (h
     .handleRaw("cancelExecution", ({ request }) =>
       Effect.gen(function* () {
         const workflowService = yield* WorkflowService;
-        // Extract executionId from URL path
-        const url = new URL(request.url);
-        const pathParts = url.pathname.split("/");
+        // Extract executionId from URL path - request.url is just the path
+        const pathParts = request.url.split("/");
         // Path is /workflows/:executionId/cancel
         const executionId = pathParts[pathParts.length - 2] ?? "";
 
