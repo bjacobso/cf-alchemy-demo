@@ -16,9 +16,9 @@ export function SchemaView({ content, components }: Props): RawHtml {
   const formatted = JSON.stringify(resolvedSchema, null, 2)
 
   return (
-    <div className="schema-view">
-      <code>{formatted}</code>
-    </div>
+    <pre className="bg-gray-800 text-gray-100 p-4 rounded overflow-x-auto text-sm">
+      <code className="font-mono whitespace-pre">{formatted}</code>
+    </pre>
   )
 }
 

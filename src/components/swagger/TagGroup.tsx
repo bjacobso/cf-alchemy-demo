@@ -10,14 +10,14 @@ interface Props {
 
 export function TagGroup({ tagName, endpoints, components }: Props): RawHtml {
   return (
-    <details className="tag-group" open>
-      <summary className="tag-header">
-        <h2>{tagName}</h2>
-        <span className="count">
+    <details className="bg-white border border-gray-200 rounded-lg" open>
+      <summary className="flex items-center justify-between p-4 cursor-pointer bg-gray-100 hover:bg-gray-200 border-b border-gray-200 list-none">
+        <h2 className="text-xl font-semibold text-gray-800">{tagName}</h2>
+        <span className="text-sm text-gray-500">
           {endpoints.length} endpoint{endpoints.length !== 1 ? "s" : ""}
         </span>
       </summary>
-      <div className="tag-content">
+      <div className="p-2 space-y-2">
         {endpoints.map((ep) => (
           <Endpoint
             path={ep.path}
