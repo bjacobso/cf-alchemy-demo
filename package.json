@@ -3,10 +3,10 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "postinstall": "ln -sf ../../../libsodium/dist/modules-esm/libsodium.mjs node_modules/libsodium-wrappers/dist/modules-esm/libsodium.mjs 2>/dev/null || true",
-    "build:css": "npx tsx scripts/build-css.ts",
-    "dev": "npm run build:css && npx tsx alchemy.run.ts",
-    "deploy": "npm run build:css && npx tsx alchemy.run.ts",
+    "postinstall": "bash -c 'src=$(echo node_modules/.pnpm/libsodium@*/node_modules/libsodium/dist/modules-esm/libsodium.mjs) && dst=$(echo node_modules/.pnpm/libsodium-wrappers@*/node_modules/libsodium-wrappers/dist/modules-esm) && cp \"$src\" \"$dst/libsodium.mjs\"' 2>/dev/null || true",
+    "build:css": "pnpm exec tsx scripts/build-css.ts",
+    "dev": "pnpm build:css && pnpm exec tsx alchemy.run.ts",
+    "deploy": "pnpm build:css && pnpm exec tsx alchemy.run.ts",
     "lint": "oxlint",
     "lint:fix": "oxlint --fix",
     "format": "oxfmt --write .",
@@ -36,5 +36,6 @@
     "tailwindcss": "4.1.18",
     "tsx": "4.21.0",
     "typescript": "5.9.3"
-  }
+  },
+  "packageManager": "pnpm@10.2.0"
 }

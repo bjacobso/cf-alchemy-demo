@@ -1,7 +1,7 @@
 {
   "scripts": {
     "setup": "./conductor.sh",
-    "run": "npm run dev"
+    "run": "pnpm dev"
   },
   "runScriptMode": "nonconcurrent"
 }
