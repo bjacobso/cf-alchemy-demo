@@ -23,17 +23,19 @@ jobs:
       pull-requests: write
     steps:
       - uses: actions/checkout@v4
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: "20"
-          cache: "npm"
+          cache: "pnpm"
       - name: Install dependencies
-        run: rm -f package-lock.json && npm install
+        run: pnpm install --frozen-lockfile
       - name: Build CSS
-        run: npm run build:css
+        run: pnpm build:css
       - name: Deploy to ${{ env.STAGE }} stage
-        run: npx tsx alchemy.run.ts
+        run: pnpm exec tsx alchemy.run.ts
         env:
           STAGE: ${{ env.STAGE }}
           ALCHEMY_PASSWORD: ${{ secrets.ALCHEMY_PASSWORD }}
@@ -46,7 +48,7 @@ jobs:
 
       - name: Deploy to prod stage
         if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
-        run: npx tsx alchemy.run.ts
+        run: pnpm exec tsx alchemy.run.ts
         env:
           STAGE: prod
           ALCHEMY_PASSWORD: ${{ secrets.ALCHEMY_PASSWORD }}
@@ -65,13 +67,15 @@ jobs:
       pull-requests: write
     steps:
       - uses: actions/checkout@v4
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: "20"
-          cache: "npm"
+          cache: "pnpm"
       - name: Install dependencies
-        run: rm -f package-lock.json && npm install
+        run: pnpm install --frozen-lockfile
       - name: Safety Check
         run: |-
           if [ "${{ env.STAGE }}" = "main" ] || [ "${{ env.STAGE }}" = "prod" ]; then
@@ -79,7 +83,7 @@ jobs:
             exit 1
           fi
       - name: Destroy Preview Environment
-        run: npx tsx alchemy.run.ts destroy
+        run: pnpm exec tsx alchemy.run.ts destroy
         env:
           STAGE: ${{ env.STAGE }}
           ALCHEMY_PASSWORD: ${{ secrets.ALCHEMY_PASSWORD }}
