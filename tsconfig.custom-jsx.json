@@ -1,0 +1,15 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "jsx": "react",
+    "jsxFactory": "jsx",
+    "jsxFragmentFactory": "Fragment"
+  },
+  "include": [
+    "src/jsx-runtime.ts",
+    "src/components/Counter.tsx",
+    "src/components/Layout.tsx",
+    "src/components/SwaggerUI.tsx",
+    "src/components/swagger/**/*"
+  ]
+}

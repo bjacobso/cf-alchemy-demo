@@ -1,3 +1,5 @@
+// @ts-nocheck - Legacy custom JSX component, not type-checked with React types
+/** @jsx jsx */
 import { jsx, RawHtml } from "../../jsx-runtime"
 import type { ApiInfo as ApiInfoType } from "./types"
 

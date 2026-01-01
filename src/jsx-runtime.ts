@@ -1,3 +1,14 @@
+/**
+ * Custom JSX Runtime
+ *
+ * This is a minimal JSX-to-string renderer (~100 lines) that demonstrates
+ * how JSX works at a fundamental level without React.
+ *
+ * Note: This module is used by the legacy components (Counter.tsx, Layout.tsx,
+ * SwaggerUI.tsx) which use @jsx pragma comments to override the default
+ * React JSX factory. New components should use React.
+ */
+
 // Wrapper class to mark strings as safe HTML (already rendered)
 export class RawHtml {
   constructor(public readonly html: string) {}
@@ -13,15 +24,9 @@ type Props = Record<string, unknown> & { children?: Child }
 type ComponentFn = (props: Props) => RawHtml
 type JsxType = string | ComponentFn
 
-// JSX namespace for TypeScript
-declare global {
-  namespace JSX {
-    type Element = RawHtml
-    interface IntrinsicElements {
-      [elemName: string]: Props
-    }
-  }
-}
+// Note: We don't declare a global JSX namespace here because it conflicts
+// with React's JSX types. Files using this custom runtime should use
+// @jsx pragmas to override the JSX factory per-file.
 
 function raw(html: string): RawHtml {
   return new RawHtml(html)

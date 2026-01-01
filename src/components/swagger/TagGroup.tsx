@@ -1,3 +1,5 @@
+// @ts-nocheck - Legacy custom JSX component, not type-checked with React types
+/** @jsx jsx */
 import { jsx, RawHtml } from "../../jsx-runtime"
 import type { EndpointInfo, Components } from "./types"
 import { Endpoint } from "./Endpoint"

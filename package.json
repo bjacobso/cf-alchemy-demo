@@ -5,8 +5,11 @@
   "scripts": {
     "postinstall": "ln -sf ../../../libsodium/dist/modules-esm/libsodium.mjs node_modules/libsodium-wrappers/dist/modules-esm/libsodium.mjs 2>/dev/null || true",
     "build:css": "npx tsx scripts/build-css.ts",
-    "dev": "npm run build:css && npx tsx alchemy.run.ts",
-    "deploy": "npm run build:css && npx tsx alchemy.run.ts",
+    "build:client": "vite build --config vite.client.config.ts && npx tsx scripts/embed-client.ts",
+    "build:server": "vite build --config vite.server.config.ts",
+    "build": "npm run build:css && npm run build:client && npm run build:server",
+    "dev": "npm run build && npx tsx alchemy.run.ts",
+    "deploy": "npm run build && npx tsx alchemy.run.ts",
     "lint": "oxlint",
     "lint:fix": "oxlint --fix",
     "format": "oxfmt --write .",
@@ -24,17 +27,23 @@
     "alchemy": "latest",
     "dotenv": "^17.2.3",
     "effect": "^3.19",
-    "libsodium": "^0.7.16"
+    "libsodium": "^0.7.16",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4",
     "@playwright/test": "^1.40.0",
     "@tailwindcss/cli": "^4",
     "@types/node": "^25.0.3",
+    "@types/react": "^18.2.0",
+    "@types/react-dom": "^18.2.0",
+    "@vitejs/plugin-react": "^4.2.0",
     "oxfmt": "^0.1",
     "oxlint": "^1",
     "tailwindcss": "^4.1.18",
     "tsx": "^4",
-    "typescript": "^5.9.3"
+    "typescript": "^5.9.3",
+    "vite": "^6.0.0"
   }
 }

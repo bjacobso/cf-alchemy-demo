@@ -1,3 +1,5 @@
+// @ts-nocheck - Legacy custom JSX component, not type-checked with React types
+/** @jsx jsx */
 import { jsx, RawHtml } from "../jsx-runtime"
 import type { OpenAPISpec, EndpointInfo, HttpMethod } from "./swagger/types"
 import { Layout } from "./Layout"
