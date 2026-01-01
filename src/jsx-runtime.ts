@@ -23,7 +23,7 @@ function raw(html: string): RawHtml {
   return new RawHtml(html)
 }
 
-function isRaw(value: unknown): value is RawHtml {
+function isRaw(value: unknown): {
   return value instanceof RawHtml
 }
 
@@ -49,7 +49,7 @@ function escapeHtml(str: string): string {
     (c) =>
       ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[
         c
-      ]!
+      ]!,
   )
 }
 
@@ -61,7 +61,7 @@ function renderChildren(children: Child): string {
 }
 
 export function jsx(
-  type: string | ((props: Props) => RawHtml),
+  type: string | (props: Props) => RawHtml,
   props: Props | null,
   ...children: Child[]
 ): RawHtml {
@@ -70,7 +70,7 @@ export function jsx(
 
   // Merge children from props and rest arguments
   const allChildren =
-    children.length > 0 ? children : (safeProps.children as Child)
+    children.length > 0 ? children : safeProps.children as Child
 
   if (typeof type === "function") {
     return type({ ...safeProps, children: allChildren })
