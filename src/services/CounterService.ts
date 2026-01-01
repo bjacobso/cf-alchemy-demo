@@ -4,9 +4,9 @@ import { CloudflareEnv } from "./CloudflareEnv"
 // Counter service interface - what the service provides
 // Using never for error channel since we handle errors via orDie
 interface ICounterService {
-  readonlygetCount: Effect.Effect<number>
-  readonlyincrement: Effect.Effect<void>
-  readonlydecrement: Effect.Effect<void>
+  readonly getCount: Effect.Effect<number>
+  readonly increment: Effect.Effect<void>
+  readonly decrement: Effect.Effect<void>
 }
 
 // Effect Context.Tag for the CounterService
