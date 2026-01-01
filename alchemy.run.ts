@@ -13,7 +13,9 @@ try {
   // Not in a git repo or git not available
 }
 
-const stage = process.env.STAGE || branch || "dev"
+// Sanitize branch name for Cloudflare worker names (replace / with -)
+const sanitizedBranch = branch.replace(/\//g, "-")
+const stage = process.env.STAGE || sanitizedBranch || "dev"
 
 const app = await alchemy("alchemy-do-demo", {
   stage,
