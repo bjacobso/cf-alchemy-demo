@@ -23,12 +23,15 @@ jobs:
       pull-requests: write
     steps:
       - uses: actions/checkout@v4
-      - name: Setup Bun
-        uses: oven-sh/setup-bun@v2
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
       - name: Install dependencies
-        run: bun install
+        run: npm ci
       - name: Deploy
-        run: bun alchemy deploy --stage ${{ env.STAGE }}
+        run: npx tsx alchemy.run.ts --stage ${{ env.STAGE }}
         env:
           ALCHEMY_PASSWORD: ${{ secrets.ALCHEMY_PASSWORD }}
           ALCHEMY_STATE_TOKEN: ${{ secrets.ALCHEMY_STATE_TOKEN }}
@@ -47,10 +50,13 @@ jobs:
       pull-requests: write
     steps:
       - uses: actions/checkout@v4
-      - name: Setup Bun
-        uses: oven-sh/setup-bun@v2
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
       - name: Install dependencies
-        run: bun install
+        run: npm ci
       - name: Safety Check
         run: |-
           if [ "${{ env.STAGE }}" = "prod" ]; then
@@ -58,7 +64,7 @@ jobs:
             exit 1
           fi
       - name: Destroy Preview Environment
-        run: bun alchemy destroy --stage ${{ env.STAGE }}
+        run: npx tsx alchemy.run.ts destroy --stage ${{ env.STAGE }}
         env:
           ALCHEMY_PASSWORD: ${{ secrets.ALCHEMY_PASSWORD }}
           ALCHEMY_STATE_TOKEN: ${{ secrets.ALCHEMY_STATE_TOKEN }}

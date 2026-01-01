@@ -13,17 +13,17 @@ A minimal Cloudflare Worker + Durable Object project using [Alchemy](https://alc
 
 ```bash
 # Install dependencies
-bun install
+npm install
 
 # Configure Alchemy (one-time)
-bun alchemy configure
-bun alchemy login
+npx alchemy configure
+npx alchemy login
 
 # Run local dev server
-bun alchemy dev
+npm run dev
 
 # Deploy to production
-bun alchemy deploy
+npm run deploy
 ```
 
 ## Endpoints

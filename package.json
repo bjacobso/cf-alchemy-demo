@@ -3,14 +3,17 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "dev": "bun alchemy dev",
-    "deploy": "bun alchemy deploy"
+    "postinstall": "ln -sf ../../../libsodium/dist/modules-esm/libsodium.mjs node_modules/libsodium-wrappers/dist/modules-esm/libsodium.mjs 2>/dev/null || true",
+    "dev": "npx tsx alchemy.run.ts",
+    "deploy": "npx tsx alchemy.run.ts"
   },
   "dependencies": {
-    "alchemy": "latest"
+    "alchemy": "latest",
+    "libsodium": "^0.7.16"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4",
+    "tsx": "^4",
     "typescript": "^5"
   }
 }
