@@ -1,38 +1,23 @@
-import { Effect, Context, Layer, Exit } from "effect";
+import { Effect, Context, Layer, Exit, Schema } from "effect";
 import { CloudflareEnv } from "./CloudflareEnv";
 import type { IndexEntry } from "../durable-objects/WorkflowIndex";
+import {
+  FullState,
+  type ExecutionState,
+  type ActivityEntry,
+  type DeferredEntry,
+  type ClockEntry,
+} from "../workflow/schemas";
 
-// Execution detail from WorkflowExecution DO
+// Decoder for validating RPC response
+const decodeFullState = Schema.decodeUnknownSync(FullState);
+
+// Execution detail for UI display
 export interface ExecutionDetail {
-  state:
-    | {
-        executionId: string;
-        workflowName: string;
-        status: string;
-        payload: unknown;
-        result?: unknown;
-        error?: unknown;
-        createdAt: number;
-        updatedAt: number;
-      }
-    | undefined;
-  activities: Array<{
-    name: string;
-    status: string;
-    attempts: number;
-    result?: unknown;
-    error?: unknown;
-  }>;
-  deferreds: Array<{
-    name: string;
-    resolved: boolean;
-    value?: unknown;
-  }>;
-  clocks: Array<{
-    name: string;
-    wakeAt: number;
-    completed: boolean;
-  }>;
+  state: ExecutionState | undefined;
+  activities: ActivityEntry[];
+  deferreds: DeferredEntry[];
+  clocks: ClockEntry[];
 }
 
 // Available workflow definition
@@ -76,53 +61,16 @@ export const WorkflowServiceLive = Layer.effect(
       getExecution: (executionId: string) =>
         Effect.tryPromise(async () => {
           const stub = getExecutionStub(executionId);
-          const fullState = (await stub.getFullState()) as {
-            state:
-              | {
-                  executionId: string;
-                  workflowName: string;
-                  status: string;
-                  payload: unknown;
-                  result?: unknown;
-                  error?: unknown;
-                  createdAt: number;
-                  updatedAt: number;
-                }
-              | undefined;
-            // After RPC serialization, Maps become plain objects
-            activities: Record<
-              string,
-              {
-                name: string;
-                status: string;
-                attempts: number;
-                result?: unknown;
-                error?: unknown;
-              }
-            >;
-            deferreds: Record<string, { name: string; resolved: boolean; value?: unknown }>;
-            clocks: Record<string, { name: string; wakeAt: number; completed: boolean }>;
-          };
+          const rawState = await stub.getFullState();
+
+          // Validate the RPC response using schema
+          const fullState = decodeFullState(rawState);
 
           return {
             state: fullState.state,
-            activities: Object.values(fullState.activities || {}).map((a) => ({
-              name: a.name,
-              status: a.status,
-              attempts: a.attempts,
-              result: a.result,
-              error: a.error,
-            })),
-            deferreds: Object.values(fullState.deferreds || {}).map((d) => ({
-              name: d.name,
-              resolved: d.resolved,
-              value: d.value,
-            })),
-            clocks: Object.values(fullState.clocks || {}).map((c) => ({
-              name: c.name,
-              wakeAt: c.wakeAt,
-              completed: c.completed,
-            })),
+            activities: Object.values(fullState.activities || {}),
+            deferreds: Object.values(fullState.deferreds || {}),
+            clocks: Object.values(fullState.clocks || {}),
           };
         }).pipe(Effect.orDie),
 

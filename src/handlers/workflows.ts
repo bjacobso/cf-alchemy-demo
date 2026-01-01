@@ -1,10 +1,19 @@
 import { HttpApiBuilder, HttpServerRequest, HttpServerResponse } from "@effect/platform";
-import { Effect } from "effect";
+import { Effect, Schema, Either } from "effect";
 import { AppApi } from "../api/api";
 import { WorkflowService } from "../services/WorkflowService";
 import { WorkflowList } from "../components/workflows/WorkflowList";
 import { WorkflowDetail } from "../components/workflows/WorkflowDetail";
 import { WorkflowStartForm } from "../components/workflows/WorkflowStartForm";
+
+// Schema for parsing JSON strings
+const JsonFromString = Schema.transform(Schema.String, Schema.Unknown, {
+  decode: (s) => JSON.parse(s || "{}"),
+  encode: (u) => JSON.stringify(u),
+});
+
+// Decoders
+const decodeJsonPayload = Schema.decodeUnknownEither(JsonFromString);
 
 // Handler implementation for the workflows group
 export const WorkflowsHandlerLive = HttpApiBuilder.group(AppApi, "workflows", (handlers) =>
@@ -37,10 +46,9 @@ export const WorkflowsHandlerLive = HttpApiBuilder.group(AppApi, "workflows", (h
         const workflowName = formData.get("workflowName") as string;
         const payloadStr = formData.get("payload") as string;
 
-        let payload: unknown;
-        try {
-          payload = JSON.parse(payloadStr || "{}");
-        } catch {
+        // Parse JSON payload using Schema
+        const payloadResult = decodeJsonPayload(payloadStr);
+        if (Either.isLeft(payloadResult)) {
           const workflows = yield* workflowService.getAvailableWorkflows;
           const html =
             "<!DOCTYPE html>" +
@@ -51,7 +59,10 @@ export const WorkflowsHandlerLive = HttpApiBuilder.group(AppApi, "workflows", (h
           return HttpServerResponse.html(html);
         }
 
-        const executionId = yield* workflowService.startExecution(workflowName, payload);
+        const executionId = yield* workflowService.startExecution(
+          workflowName,
+          payloadResult.right,
+        );
 
         return HttpServerResponse.redirect(`/workflows/${executionId}`, {
           status: 303,
@@ -87,12 +98,9 @@ export const WorkflowsHandlerLive = HttpApiBuilder.group(AppApi, "workflows", (h
         const deferredName = formData.get("deferredName") as string;
         const valueStr = formData.get("value") as string;
 
-        let value: unknown;
-        try {
-          value = JSON.parse(valueStr || "{}");
-        } catch {
-          value = valueStr;
-        }
+        // Parse JSON value using Schema, fallback to string if invalid JSON
+        const valueResult = decodeJsonPayload(valueStr);
+        const value = Either.isRight(valueResult) ? valueResult.right : valueStr;
 
         yield* workflowService.sendEvent(executionId, deferredName, value);
 

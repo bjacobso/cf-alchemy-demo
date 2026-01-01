@@ -1,41 +1,23 @@
 import { DurableObject } from "cloudflare:workers";
+import { Schema } from "effect";
 import type { Env } from "../services/CloudflareEnv";
 import type { WorkflowIndex, IndexEntry } from "./WorkflowIndex";
+import {
+  ExecutionState as ExecutionStateSchema,
+  ActivityEntry as ActivityEntrySchema,
+  DeferredEntry as DeferredEntrySchema,
+  ClockEntry as ClockEntrySchema,
+  type ExecutionState,
+  type ActivityEntry,
+  type DeferredEntry,
+  type ClockEntry,
+} from "../workflow/schemas";
 
-// Workflow execution state persisted in DO storage
-interface ExecutionState {
-  executionId: string;
-  workflowName: string;
-  status: "running" | "suspended" | "done" | "failed" | "interrupted";
-  payload: unknown;
-  result?: unknown;
-  error?: unknown;
-  createdAt: number;
-  updatedAt: number;
-}
-
-// Activity tracking
-interface ActivityEntry {
-  name: string;
-  attempts: number;
-  status: "pending" | "running" | "completed" | "failed";
-  result?: unknown;
-  error?: unknown;
-}
-
-// Deferred tracking (for DurableDeferred)
-interface DeferredEntry {
-  name: string;
-  resolved: boolean;
-  value?: unknown;
-}
-
-// Clock tracking (for DurableClock.sleep)
-interface ClockEntry {
-  name: string;
-  wakeAt: number;
-  completed: boolean;
-}
+// Decoders for validating storage data
+const decodeExecutionState = Schema.decodeUnknownSync(ExecutionStateSchema);
+const decodeActivityEntry = Schema.decodeUnknownSync(ActivityEntrySchema);
+const decodeDeferredEntry = Schema.decodeUnknownSync(DeferredEntrySchema);
+const decodeClockEntry = Schema.decodeUnknownSync(ClockEntrySchema);
 
 /**
  * WorkflowExecution Durable Object
@@ -53,7 +35,9 @@ export class WorkflowExecution extends DurableObject<Env> {
   // ========== State Management ==========
 
   private async getState(): Promise<ExecutionState | undefined> {
-    return this.ctx.storage.get<ExecutionState>("state");
+    const state = await this.ctx.storage.get<unknown>("state");
+    if (!state) return undefined;
+    return decodeExecutionState(state);
   }
 
   private async setState(state: ExecutionState): Promise<void> {
@@ -168,7 +152,9 @@ export class WorkflowExecution extends DurableObject<Env> {
   // ========== Activity Methods ==========
 
   async getActivity(name: string): Promise<ActivityEntry | undefined> {
-    return this.ctx.storage.get<ActivityEntry>(`activity:${name}`);
+    const entry = await this.ctx.storage.get<unknown>(`activity:${name}`);
+    if (!entry) return undefined;
+    return decodeActivityEntry(entry);
   }
 
   async activityStart(name: string, attempt: number): Promise<void> {
@@ -208,7 +194,9 @@ export class WorkflowExecution extends DurableObject<Env> {
   // ========== Deferred Methods (DurableDeferred) ==========
 
   async getDeferred(name: string): Promise<DeferredEntry | undefined> {
-    return this.ctx.storage.get<DeferredEntry>(`deferred:${name}`);
+    const entry = await this.ctx.storage.get<unknown>(`deferred:${name}`);
+    if (!entry) return undefined;
+    return decodeDeferredEntry(entry);
   }
 
   async deferredResult(name: string): Promise<unknown | undefined> {
@@ -245,7 +233,9 @@ export class WorkflowExecution extends DurableObject<Env> {
   // ========== Clock Methods (DurableClock.sleep) ==========
 
   async getClock(name: string): Promise<ClockEntry | undefined> {
-    return this.ctx.storage.get<ClockEntry>(`clock:${name}`);
+    const entry = await this.ctx.storage.get<unknown>(`clock:${name}`);
+    if (!entry) return undefined;
+    return decodeClockEntry(entry);
   }
 
   async scheduleClock(name: string, wakeAt: number): Promise<void> {
@@ -324,25 +314,25 @@ export class WorkflowExecution extends DurableObject<Env> {
     const deferreds = new Map<string, DeferredEntry>();
     const clocks = new Map<string, ClockEntry>();
 
-    const activityEntries = await this.ctx.storage.list<ActivityEntry>({
+    const activityEntries = await this.ctx.storage.list<unknown>({
       prefix: "activity:",
     });
     for (const [key, entry] of activityEntries) {
-      activities.set(key.replace("activity:", ""), entry);
+      activities.set(key.replace("activity:", ""), decodeActivityEntry(entry));
     }
 
-    const deferredEntries = await this.ctx.storage.list<DeferredEntry>({
+    const deferredEntries = await this.ctx.storage.list<unknown>({
       prefix: "deferred:",
     });
     for (const [key, entry] of deferredEntries) {
-      deferreds.set(key.replace("deferred:", ""), entry);
+      deferreds.set(key.replace("deferred:", ""), decodeDeferredEntry(entry));
     }
 
-    const clockEntries = await this.ctx.storage.list<ClockEntry>({
+    const clockEntries = await this.ctx.storage.list<unknown>({
       prefix: "clock:",
     });
     for (const [key, entry] of clockEntries) {
-      clocks.set(key.replace("clock:", ""), entry);
+      clocks.set(key.replace("clock:", ""), decodeClockEntry(entry));
     }
 
     return { state, activities, deferreds, clocks };

@@ -1,16 +1,13 @@
 import { DurableObject } from "cloudflare:workers";
+import { Schema } from "effect";
 import type { Env } from "../services/CloudflareEnv";
+import { IndexEntry as IndexEntrySchema, type IndexEntry } from "../workflow/schemas";
 
-/**
- * Index entry for a workflow execution
- */
-export interface IndexEntry {
-  executionId: string;
-  workflowName: string;
-  status: string;
-  createdAt: number;
-  updatedAt: number;
-}
+// Re-export the type for external use
+export type { IndexEntry };
+
+// Decoder for validating storage data
+const decodeIndexEntry = Schema.decodeUnknownSync(IndexEntrySchema);
 
 /**
  * WorkflowIndex Durable Object
@@ -26,7 +23,9 @@ export class WorkflowIndex extends DurableObject<Env> {
    * Register a new workflow execution
    */
   async register(entry: IndexEntry): Promise<void> {
-    await this.ctx.storage.put(`execution:${entry.executionId}`, entry);
+    // Validate entry before storing
+    const validated = decodeIndexEntry(entry);
+    await this.ctx.storage.put(`execution:${validated.executionId}`, validated);
   }
 
   /**
@@ -45,14 +44,15 @@ export class WorkflowIndex extends DurableObject<Env> {
    * List all workflow executions, sorted by creation time (newest first)
    */
   async list(limit = 100): Promise<IndexEntry[]> {
-    const entries = await this.ctx.storage.list<IndexEntry>({
+    const entries = await this.ctx.storage.list<unknown>({
       prefix: "execution:",
       limit,
     });
 
     const result: IndexEntry[] = [];
     for (const [, entry] of entries) {
-      result.push(entry);
+      // Validate each entry from storage
+      result.push(decodeIndexEntry(entry));
     }
 
     // Sort by creation time, newest first
@@ -63,7 +63,9 @@ export class WorkflowIndex extends DurableObject<Env> {
    * Get a single execution entry
    */
   async get(executionId: string): Promise<IndexEntry | undefined> {
-    return this.ctx.storage.get<IndexEntry>(`execution:${executionId}`);
+    const entry = await this.ctx.storage.get<unknown>(`execution:${executionId}`);
+    if (!entry) return undefined;
+    return decodeIndexEntry(entry);
   }
 
   /**
