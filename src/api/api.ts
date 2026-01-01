@@ -17,7 +17,6 @@ class DocsGroup extends HttpApiGroup.make("docs")
 
 // Workflows API group - admin interface for workflow executions
 class WorkflowsGroup extends HttpApiGroup.make("workflows")
-  .prefix("/workflows")
   .add(HttpApiEndpoint.get("listExecutions", "/").addSuccess(Schema.String))
   .add(HttpApiEndpoint.get("startForm", "/start").addSuccess(Schema.String))
   .add(HttpApiEndpoint.post("startExecution", "/start").addSuccess(Schema.String))
@@ -25,7 +24,8 @@ class WorkflowsGroup extends HttpApiGroup.make("workflows")
   .add(HttpApiEndpoint.post("sendEvent")`/${executionIdParam}/event`.addSuccess(Schema.String))
   .add(
     HttpApiEndpoint.post("cancelExecution")`/${executionIdParam}/cancel`.addSuccess(Schema.String),
-  ) {}
+  )
+  .prefix("/workflows") {}
 
 // Top-level API definition combining all groups
 export class AppApi extends HttpApi.make("app")
