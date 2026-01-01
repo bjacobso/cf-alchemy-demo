@@ -30,6 +30,8 @@ jobs:
           cache: "npm"
       - name: Install dependencies
         run: npm ci
+      - name: Build CSS
+        run: npm run build:css
       - name: Deploy to ${{ env.STAGE }} stage
         run: npx tsx alchemy.run.ts
         env:

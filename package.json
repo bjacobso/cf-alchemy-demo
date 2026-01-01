@@ -4,8 +4,9 @@
   "type": "module",
   "scripts": {
     "postinstall": "ln -sf ../../../libsodium/dist/modules-esm/libsodium.mjs node_modules/libsodium-wrappers/dist/modules-esm/libsodium.mjs 2>/dev/null || true",
-    "dev": "npx tsx alchemy.run.ts",
-    "deploy": "npx tsx alchemy.run.ts",
+    "build:css": "npx tsx scripts/build-css.ts",
+    "dev": "npm run build:css && npx tsx alchemy.run.ts",
+    "deploy": "npm run build:css && npx tsx alchemy.run.ts",
     "lint": "oxlint",
     "lint:fix": "oxlint --fix",
     "format": "oxfmt --write .",
@@ -24,9 +25,11 @@
   "devDependencies": {
     "@cloudflare/workers-types": "^4",
     "@playwright/test": "^1.40.0",
+    "@tailwindcss/cli": "^4",
     "@types/node": "^25.0.3",
     "oxfmt": "^0.1",
     "oxlint": "^1",
+    "tailwindcss": "^4",
     "tsx": "^4",
     "typescript": "^5.9.3"
   }
