@@ -1,7 +1,3 @@
-// @ts-nocheck - Legacy custom JSX component, not type-checked with React types
-/** @jsx jsx */
-/** @jsxFrag Fragment */
-import { jsx, Fragment, RawHtml } from "../../jsx-runtime";
 import type { Operation, Components, HttpMethod } from "./types";
 import { SchemaView } from "./SchemaView";
 
@@ -39,7 +35,7 @@ const methodColors: Record<
   },
 };
 
-export function Endpoint({ path, method, operation, components }: Props): RawHtml {
+export function Endpoint({ path, method, operation, components }: Props) {
   const colors = methodColors[method];
 
   return (
@@ -75,7 +71,7 @@ export function Endpoint({ path, method, operation, components }: Props): RawHtm
               </thead>
               <tbody>
                 {operation.parameters.map((param) => (
-                  <tr className="border-t border-gray-100">
+                  <tr key={param.name} className="border-t border-gray-100">
                     <td className="p-2 font-mono font-semibold">
                       {param.name}
                       {param.required && <span className="text-red-500 text-xs ml-1">*</span>}
@@ -108,7 +104,7 @@ export function Endpoint({ path, method, operation, components }: Props): RawHtm
           </h4>
           <div className="space-y-2">
             {Object.entries(operation.responses).map(([code, response]) => (
-              <div className="flex items-start gap-3 p-3 bg-gray-50 rounded">
+              <div key={code} className="flex items-start gap-3 p-3 bg-gray-50 rounded">
                 <span
                   className={`font-mono font-bold px-2 py-1 rounded text-white text-sm ${
                     code.startsWith("2")

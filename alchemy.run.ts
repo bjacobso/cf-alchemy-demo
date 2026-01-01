@@ -42,9 +42,6 @@ export const worker = await Worker("worker", {
   bindings: {
     COUNTER: counter,
   },
-  bundle: {
-    logLevel: "error", // Suppress JSX pragma warnings from legacy components
-  },
 });
 
 console.log(`Deployed worker: ${worker.url}`);

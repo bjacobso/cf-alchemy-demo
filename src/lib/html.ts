@@ -77,3 +77,39 @@ export function createHtmlDocument({ title, appHtml, props }: CreateHtmlDocument
   </body>
 </html>`;
 }
+
+interface CreateStaticHtmlDocumentOptions {
+  /** Page title for <title> tag */
+  title: string;
+  /** React-rendered HTML string from renderToString() */
+  appHtml: string;
+}
+
+/**
+ * Create a static HTML document without client-side hydration
+ *
+ * Use this for pages that don't need client-side interactivity (e.g., docs).
+ *
+ * @example
+ * const html = createStaticHtmlDocument({
+ *   title: "API Docs",
+ *   appHtml: renderToString(<SwaggerUI spec={spec} />)
+ * })
+ */
+export function createStaticHtmlDocument({
+  title,
+  appHtml,
+}: CreateStaticHtmlDocumentOptions): string {
+  return `<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>${escapeHtml(title)}</title>
+    <style>${tailwindCSS}</style>
+  </head>
+  <body>
+    <div id="root">${appHtml}</div>
+  </body>
+</html>`;
+}

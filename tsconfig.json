@@ -13,14 +13,6 @@
     "resolveJsonModule": true,
     "jsx": "react-jsx"
   },
-  "include": ["src/**/*", "alchemy.run.ts", "vite.*.config.ts"],
-  "exclude": [
-    "node_modules",
-    "dist",
-    "src/jsx-runtime.ts",
-    "src/components/Counter.tsx",
-    "src/components/Layout.tsx",
-    "src/components/SwaggerUI.tsx",
-    "src/components/swagger/**/*"
-  ]
+  "include": ["src/**/*", "alchemy.run.ts", "vite.*.config.ts", "scripts/**/*"],
+  "exclude": ["node_modules", "dist"]
 }

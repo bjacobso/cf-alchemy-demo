@@ -1,6 +1,3 @@
-// @ts-nocheck - Legacy custom JSX component, not type-checked with React types
-/** @jsx jsx */
-import { jsx, RawHtml } from "../../jsx-runtime";
 import type { MediaType, Components, SchemaObject } from "./types";
 
 interface Props {
@@ -8,10 +5,10 @@ interface Props {
   components: Components | undefined;
 }
 
-export function SchemaView({ content, components }: Props): RawHtml {
+export function SchemaView({ content, components }: Props) {
   const jsonContent = content["application/json"];
   if (!jsonContent?.schema) {
-    return null as unknown as RawHtml;
+    return null;
   }
 
   const resolvedSchema = resolveSchema(jsonContent.schema, components);

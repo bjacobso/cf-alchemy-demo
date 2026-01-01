@@ -1,13 +1,10 @@
-// @ts-nocheck - Legacy custom JSX component, not type-checked with React types
-/** @jsx jsx */
-import { jsx, RawHtml } from "../../jsx-runtime";
 import type { ApiInfo as ApiInfoType } from "./types";
 
 interface Props {
   info: ApiInfoType;
 }
 
-export function ApiInfo({ info }: Props): RawHtml {
+export function ApiInfo({ info }: Props) {
   return (
     <header className="bg-gray-900 text-white p-8 rounded-lg mb-8">
       <h1 className="text-3xl font-bold mb-2">{info.title}</h1>

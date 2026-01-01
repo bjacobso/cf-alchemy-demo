@@ -1,6 +1,3 @@
-// @ts-nocheck - Legacy custom JSX component, not type-checked with React types
-/** @jsx jsx */
-import { jsx, RawHtml } from "../../jsx-runtime";
 import type { EndpointInfo, Components } from "./types";
 import { Endpoint } from "./Endpoint";
 
@@ -10,7 +7,7 @@ interface Props {
   components: Components | undefined;
 }
 
-export function TagGroup({ tagName, endpoints, components }: Props): RawHtml {
+export function TagGroup({ tagName, endpoints, components }: Props) {
   return (
     <details className="bg-white border border-gray-200 rounded-lg" open>
       <summary className="flex items-center justify-between p-4 cursor-pointer bg-gray-100 hover:bg-gray-200 border-b border-gray-200 list-none">
@@ -22,6 +19,7 @@ export function TagGroup({ tagName, endpoints, components }: Props): RawHtml {
       <div className="p-2 space-y-2">
         {endpoints.map((ep) => (
           <Endpoint
+            key={`${ep.method}-${ep.path}`}
             path={ep.path}
             method={ep.method}
             operation={ep.operation}
