@@ -69,13 +69,13 @@ export function jsx(type, props, ...children): RawHtml {
 
 ### Key Concepts
 
-| Concept | Implementation |
-|---------|----------------|
-| **RawHtml wrapper** | Marks strings as already-rendered HTML |
-| **HTML escaping** | Prevents XSS via `escapeHtml()` |
-| **Void elements** | Self-closing tags like `<img>`, `<input>` |
-| **dangerouslySetInnerHTML** | Escape hatch for inline CSS/JS |
-| **Fragment support** | `<>...</>` renders children without wrapper |
+| Concept                     | Implementation                              |
+| --------------------------- | ------------------------------------------- |
+| **RawHtml wrapper**         | Marks strings as already-rendered HTML      |
+| **HTML escaping**           | Prevents XSS via `escapeHtml()`             |
+| **Void elements**           | Self-closing tags like `<img>`, `<input>`   |
+| **dangerouslySetInnerHTML** | Escape hatch for inline CSS/JS              |
+| **Fragment support**        | `<>...</>` renders children without wrapper |
 
 ### What We Don't Have
 
@@ -126,13 +126,13 @@ export class Counter extends DurableObject<Env> {
 
 ### Why Durable Objects?
 
-| Traditional Stack | Durable Object |
-|-------------------|----------------|
+| Traditional Stack       | Durable Object                  |
+| ----------------------- | ------------------------------- |
 | Server + Database + ORM | Single class with `ctx.storage` |
-| Connection pooling | Built-in |
-| Migrations | Just `storage.put()` |
-| Caching layer | State lives in memory |
-| Session affinity | Automatic |
+| Connection pooling      | Built-in                        |
+| Migrations              | Just `storage.put()`            |
+| Caching layer           | State lives in memory           |
+| Session affinity        | Automatic                       |
 
 ---
 

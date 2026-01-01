@@ -17,20 +17,20 @@
     "test:e2e:headed": "playwright test --headed"
   },
   "dependencies": {
-    "@effect/experimental": "^0.58",
-    "@effect/platform": "^0.94",
-    "@effect/sql": "^0.49",
-    "@effect/sql-sqlite-do": "^0.27",
+    "@effect/experimental": "0.58.0",
+    "@effect/platform": "0.94.1",
+    "@effect/sql": "0.49.0",
+    "@effect/sql-sqlite-do": "0.27.0",
     "alchemy": "latest",
-    "dotenv": "^17.2.3",
-    "effect": "^3.19",
-    "libsodium": "^0.7.16"
+    "dotenv": "17.2.3",
+    "effect": "3.19.14",
+    "libsodium": "0.7.16"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4",
     "@playwright/test": "1.57.0",
     "@tailwindcss/cli": "4.1.18",
-    "@types/node": "^25.0.3",
+    "@types/node": "25.0.3",
     "oxfmt": "0.21.0",
     "oxlint": "1.36.0",
     "tailwindcss": "4.1.18",

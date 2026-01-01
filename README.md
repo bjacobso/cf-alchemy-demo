@@ -12,13 +12,13 @@ Building a complete web application without React, Next.js, or traditional frame
 
 ## The Stack
 
-| What | How |
-|------|-----|
+| What       | How                                                                  |
+| ---------- | -------------------------------------------------------------------- |
 | JSX → HTML | Custom `jsx()` factory in [`src/jsx-runtime.ts`](src/jsx-runtime.ts) |
-| Server | Cloudflare Durable Object |
-| State | Built-in DO storage (no database) |
-| Routing | Direct request handling |
-| Deploy | Alchemy infrastructure-as-code |
+| Server     | Cloudflare Durable Object                                            |
+| State      | Built-in DO storage (no database)                                    |
+| Routing    | Direct request handling                                              |
+| Deploy     | Alchemy infrastructure-as-code                                       |
 
 ## How the JSX Runtime Works
 
@@ -100,13 +100,13 @@ BASE_URL=https://your-worker.workers.dev npm run test:e2e
 
 ## Why This Approach?
 
-| Heavy Framework | This Project |
-|-----------------|--------------|
+| Heavy Framework  | This Project                |
+| ---------------- | --------------------------- |
 | React + ReactDOM | Custom 100-line JSX factory |
-| Next.js routing | Direct `fetch()` handler |
-| PostgreSQL + ORM | Durable Object storage |
-| Node.js server | Cloudflare Worker |
-| Webpack/Vite | Native ES modules |
+| Next.js routing  | Direct `fetch()` handler    |
+| PostgreSQL + ORM | Durable Object storage      |
+| Node.js server   | Cloudflare Worker           |
+| Webpack/Vite     | Native ES modules           |
 
 Modern web apps don't need React, Node.js, or databases. This project proves it.
 
@@ -114,9 +114,9 @@ Modern web apps don't need React, Node.js, or databases. This project proves it.
 
 For CI/CD deployment:
 
-| Secret | Description |
-|--------|-------------|
-| `ALCHEMY_PASSWORD` | Encryption password: `openssl rand -base64 32` |
-| `ALCHEMY_STATE_TOKEN` | State store token: `openssl rand -base64 32` |
+| Secret                 | Description                                                                                   |
+| ---------------------- | --------------------------------------------------------------------------------------------- |
+| `ALCHEMY_PASSWORD`     | Encryption password: `openssl rand -base64 32`                                                |
+| `ALCHEMY_STATE_TOKEN`  | State store token: `openssl rand -base64 32`                                                  |
 | `CLOUDFLARE_API_TOKEN` | [Create token](https://dash.cloudflare.com/profile/api-tokens) with "Edit Cloudflare Workers" |
-| `CLOUDFLARE_EMAIL` | Your Cloudflare login email |
+| `CLOUDFLARE_EMAIL`     | Your Cloudflare login email                                                                   |
