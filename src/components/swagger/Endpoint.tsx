@@ -9,15 +9,36 @@ interface Props {
   components: Components | undefined
 }
 
-const methodColors: Record<HttpMethod, { bg: string; border: string; badge: string }> = {
-  get: { bg: "bg-green-50", border: "border-l-green-500", badge: "bg-green-500" },
+const methodColors: Record<HttpMethod, {
+  bg: string
+  border: string
+  badge: string
+}> = {
+  get: {
+    bg: "bg-green-50",
+    border: "border-l-green-500",
+    badge: "bg-green-500",
+  },
   post: { bg: "bg-blue-50", border: "border-l-blue-500", badge: "bg-blue-500" },
-  put: { bg: "bg-amber-50", border: "border-l-amber-500", badge: "bg-amber-500" },
+  put: {
+    bg: "bg-amber-50",
+    border: "border-l-amber-500",
+    badge: "bg-amber-500",
+  },
   delete: { bg: "bg-red-50", border: "border-l-red-500", badge: "bg-red-500" },
-  patch: { bg: "bg-teal-50", border: "border-l-teal-500", badge: "bg-teal-500" },
+  patch: {
+    bg: "bg-teal-50",
+    border: "border-l-teal-500",
+    badge: "bg-teal-500",
+  },
 }
 
-export function Endpoint({ path, method, operation, components }: Props): RawHtml {
+export function Endpoint({
+  path,
+  method,
+  operation,
+  components,
+}: Props): RawHtml {
   const colors = methodColors[method]
 
   return (
@@ -34,7 +55,9 @@ export function Endpoint({ path, method, operation, components }: Props): RawHtm
           {path}
         </span>
         {operation.summary && (
-          <span className="text-gray-500 text-sm ml-auto">{operation.summary}</span>
+          <span className="text-gray-500 text-sm ml-auto">
+            {operation.summary}
+          </span>
         )}
       </summary>
       <div className="p-4 border-t border-gray-200 bg-white space-y-4">
@@ -65,7 +88,9 @@ export function Endpoint({ path, method, operation, components }: Props): RawHtm
                       )}
                     </td>
                     <td className="p-2 text-gray-600">{param.in}</td>
-                    <td className="p-2 text-gray-600">{param.description ?? "-"}</td>
+                    <td className="p-2 text-gray-600">
+                      {param.description ?? "-"}
+                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -113,9 +138,14 @@ export function Endpoint({ path, method, operation, components }: Props): RawHtm
                 >
                   {code}
                 </span>
-                <span className="text-gray-700 flex-1">{response.description}</span>
+                <span className="text-gray-700 flex-1">
+                  {response.description}
+                </span>
                 {response.content && (
-                  <SchemaView content={response.content} components={components} />
+                  <SchemaView
+                    content={response.content}
+                    components={components}
+                  />
                 )}
               </div>
             ))}

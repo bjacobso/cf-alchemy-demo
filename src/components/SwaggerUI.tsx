@@ -30,7 +30,9 @@ export function SwaggerUI({ spec }: SwaggerUIProps): RawHtml {
 }
 
 // Group endpoints by their first tag
-function groupEndpointsByTag(spec: OpenAPISpec): Record<string, EndpointInfo[]> {
+function groupEndpointsByTag(
+  spec: OpenAPISpec,
+): Record<string, EndpointInfo[]> {
   const groups: Record<string, EndpointInfo[]> = {}
   const methods: HttpMethod[] = ["get", "post", "put", "delete", "patch"]
 
