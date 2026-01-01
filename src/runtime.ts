@@ -3,7 +3,9 @@ import { Layer } from "effect";
 import { AppApi } from "./api/api";
 import { CounterHandlerLive } from "./handlers/counter";
 import { DocsHandlerLive } from "./handlers/docs";
+import { SemaphoreHandlerLive } from "./handlers/semaphore";
 import { CounterServiceLive } from "./services/CounterService";
+import { SemaphoreServiceLive } from "./services/SemaphoreService";
 import { makeEnvLayer, type Env } from "./services/CloudflareEnv";
 
 // Factory function that creates the Effect handler with env bindings
@@ -14,7 +16,9 @@ export const makeHandler = (env: Env) => {
   const ApiLive = HttpApiBuilder.api(AppApi).pipe(
     Layer.provide(CounterHandlerLive),
     Layer.provide(DocsHandlerLive),
+    Layer.provide(SemaphoreHandlerLive),
     Layer.provide(CounterServiceLive),
+    Layer.provide(SemaphoreServiceLive),
     Layer.provide(EnvLayer),
   );
 

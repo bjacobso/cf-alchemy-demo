@@ -1,9 +1,11 @@
 import { Context, Layer } from "effect";
 import type { Counter } from "../durable-objects/Counter";
+import type { Semaphore } from "../durable-objects/Semaphore";
 
 // Cloudflare Worker environment bindings
 export interface Env {
   COUNTER: DurableObjectNamespace<Counter>;
+  SEMAPHORE: DurableObjectNamespace<Semaphore>;
 }
 
 // Effect Context.Tag for accessing Cloudflare env bindings
