@@ -1,0 +1,16 @@
+{
+  "name": "alchemy-do-demo",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "bun alchemy dev",
+    "deploy": "bun alchemy deploy"
+  },
+  "dependencies": {
+    "alchemy": "latest"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4",
+    "typescript": "^5"
+  }
+}
