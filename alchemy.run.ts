@@ -33,7 +33,7 @@ const counter = DurableObjectNamespace("counter", {
 
 // Worker name includes stage to avoid conflicts between environments
 const workerName =
-  stage === "main" ? "alchemy-do-demo" : `alchemy-do-demo-${stage}`
+  stage === "prod" ? "alchemy-do-demo" : `alchemy-do-demo-${stage}`
 
 // Define the Worker with DO binding
 export const worker = await Worker("worker", {
