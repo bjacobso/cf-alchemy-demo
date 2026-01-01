@@ -1,0 +1,19 @@
+{
+  "name": "alchemy-do-demo-dev",
+  "compatibility_date": "2024-12-01",
+  "main": "src/index.ts",
+  "durable_objects": {
+    "bindings": [
+      {
+        "name": "COUNTER",
+        "class_name": "Counter"
+      }
+    ]
+  },
+  "migrations": [
+    {
+      "tag": "v1",
+      "new_sqlite_classes": ["Counter"]
+    }
+  ]
+}
