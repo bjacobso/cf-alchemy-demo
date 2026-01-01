@@ -28,13 +28,13 @@
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4",
-    "@playwright/test": "1.57.0",
-    "@tailwindcss/cli": "4.1.18",
-    "@types/node": "25.0.3",
-    "oxfmt": "0.21.0",
-    "oxlint": "1.36.0",
-    "tailwindcss": "4.1.18",
-    "tsx": "4.21.0",
-    "typescript": "5.9.3"
+    "@playwright/test": "^1.57.0",
+    "@tailwindcss/cli": "^4.1.18",
+    "@types/node": "^25.0.3",
+    "oxfmt": "^0.21.0",
+    "oxlint": "^1.36.0",
+    "tailwindcss": "^4.1.18",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3"
   }
 }
