@@ -24,8 +24,9 @@ dist/
 .wrangler/
 wrangler.jsonc
 
-# Tailwind generated
+# Generated files
 src/styles/tailwind.generated.ts
+src/lib/client-bundle.generated.ts
 
 # Playwright
 test-results/

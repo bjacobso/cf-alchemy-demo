@@ -1,0 +1,13 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "jsx": "react-jsx",
+    "lib": ["ESNext", "DOM"]
+  },
+  "include": [
+    "src/entry-client.tsx",
+    "src/entry-server.tsx",
+    "src/components/App.tsx",
+    "src/lib/**/*"
+  ]
+}
