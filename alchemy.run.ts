@@ -35,12 +35,12 @@ const counter = DurableObjectNamespace("counter", {
 const workflowExecution = DurableObjectNamespace("workflow-execution", {
   className: "WorkflowExecution",
   sqlite: true,
-})
+});
 
 const workflowIndex = DurableObjectNamespace("workflow-index", {
   className: "WorkflowIndex",
   sqlite: true,
-})
+});
 
 // Worker name includes stage to avoid conflicts between environments
 const workerName = stage === "prod" ? "alchemy-do-demo" : `alchemy-do-demo-${stage}`;

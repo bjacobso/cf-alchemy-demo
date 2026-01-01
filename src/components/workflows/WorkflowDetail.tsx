@@ -1,26 +1,26 @@
-import { jsx, RawHtml } from "../../jsx-runtime"
-import { Layout } from "../Layout"
-import { StatusBadge } from "./StatusBadge"
-import type { ExecutionDetail } from "../../services/WorkflowService"
+import { jsx, RawHtml } from "../../jsx-runtime";
+import { Layout } from "../Layout";
+import { StatusBadge } from "./StatusBadge";
+import type { ExecutionDetail } from "../../services/WorkflowService";
 
 interface WorkflowDetailProps {
-  execution: ExecutionDetail
+  execution: ExecutionDetail;
 }
 
 function formatDate(timestamp: number): string {
-  return new Date(timestamp).toLocaleString()
+  return new Date(timestamp).toLocaleString();
 }
 
 function formatJson(value: unknown): string {
   try {
-    return JSON.stringify(value, null, 2)
+    return JSON.stringify(value, null, 2);
   } catch {
-    return String(value)
+    return String(value);
   }
 }
 
 export function WorkflowDetail({ execution }: WorkflowDetailProps): RawHtml {
-  const { state, activities, deferreds, clocks } = execution
+  const { state, activities, deferreds, clocks } = execution;
 
   if (!state) {
     return (
@@ -29,31 +29,25 @@ export function WorkflowDetail({ execution }: WorkflowDetailProps): RawHtml {
           <div className="max-w-4xl mx-auto px-4">
             <div className="bg-white shadow rounded-lg p-6 text-center">
               <p className="text-gray-500">Workflow execution not found.</p>
-              <a
-                href="/workflows"
-                className="mt-4 inline-block text-blue-600 hover:underline"
-              >
+              <a href="/workflows" className="mt-4 inline-block text-blue-600 hover:underline">
                 Back to list
               </a>
             </div>
           </div>
         </div>
       </Layout>
-    )
+    );
   }
 
-  const pendingDeferreds = deferreds.filter((d) => !d.resolved)
-  const canSendEvent = state.status === "suspended" && pendingDeferreds.length > 0
+  const pendingDeferreds = deferreds.filter((d) => !d.resolved);
+  const canSendEvent = state.status === "suspended" && pendingDeferreds.length > 0;
 
   return (
     <Layout title={`Workflow: ${state.workflowName}`}>
       <div className="min-h-screen bg-gray-50 py-8">
         <div className="max-w-4xl mx-auto px-4">
           <div className="mb-4">
-            <a
-              href="/workflows"
-              className="text-blue-600 hover:underline text-sm"
-            >
+            <a href="/workflows" className="text-blue-600 hover:underline text-sm">
               &larr; Back to list
             </a>
           </div>
@@ -61,12 +55,8 @@ export function WorkflowDetail({ execution }: WorkflowDetailProps): RawHtml {
           <div className="bg-white shadow rounded-lg overflow-hidden">
             <div className="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
               <div>
-                <h1 className="text-xl font-bold text-gray-900">
-                  {state.workflowName}
-                </h1>
-                <p className="text-sm text-gray-500 font-mono mt-1">
-                  {state.executionId}
-                </p>
+                <h1 className="text-xl font-bold text-gray-900">{state.workflowName}</h1>
+                <p className="text-sm text-gray-500 font-mono mt-1">{state.executionId}</p>
               </div>
               <StatusBadge status={state.status} />
             </div>
@@ -75,15 +65,11 @@ export function WorkflowDetail({ execution }: WorkflowDetailProps): RawHtml {
               <div className="grid grid-cols-2 gap-4 text-sm">
                 <div>
                   <span className="text-gray-500">Created:</span>{" "}
-                  <span className="text-gray-900">
-                    {formatDate(state.createdAt)}
-                  </span>
+                  <span className="text-gray-900">{formatDate(state.createdAt)}</span>
                 </div>
                 <div>
                   <span className="text-gray-500">Updated:</span>{" "}
-                  <span className="text-gray-900">
-                    {formatDate(state.updatedAt)}
-                  </span>
+                  <span className="text-gray-900">{formatDate(state.updatedAt)}</span>
                 </div>
               </div>
             </div>
@@ -97,15 +83,10 @@ export function WorkflowDetail({ execution }: WorkflowDetailProps): RawHtml {
 
             {activities.length > 0 && (
               <div className="px-6 py-4 border-b border-gray-200">
-                <h2 className="text-sm font-medium text-gray-900 mb-2">
-                  Activities
-                </h2>
+                <h2 className="text-sm font-medium text-gray-900 mb-2">Activities</h2>
                 <ul className="space-y-2">
                   {activities.map((activity) => (
-                    <li
-                      key={activity.name}
-                      className="flex items-center justify-between text-sm"
-                    >
+                    <li key={activity.name} className="flex items-center justify-between text-sm">
                       <span className="flex items-center gap-2">
                         {activity.status === "completed" ? (
                           <span className="text-green-600">&#10003;</span>
@@ -127,9 +108,7 @@ export function WorkflowDetail({ execution }: WorkflowDetailProps): RawHtml {
 
             {deferreds.length > 0 && (
               <div className="px-6 py-4 border-b border-gray-200">
-                <h2 className="text-sm font-medium text-gray-900 mb-2">
-                  Waiting For
-                </h2>
+                <h2 className="text-sm font-medium text-gray-900 mb-2">Waiting For</h2>
                 <ul className="space-y-3">
                   {deferreds.map((deferred) => (
                     <li key={deferred.name} className="text-sm">
@@ -150,11 +129,7 @@ export function WorkflowDetail({ execution }: WorkflowDetailProps): RawHtml {
                           action={`/workflows/${state.executionId}/event`}
                           className="ml-6 flex gap-2"
                         >
-                          <input
-                            type="hidden"
-                            name="deferredName"
-                            value={deferred.name}
-                          />
+                          <input type="hidden" name="deferredName" value={deferred.name} />
                           <textarea
                             name="value"
                             placeholder='{"ready": true, "estimatedShipDate": "2026-01-15"}'
@@ -180,10 +155,7 @@ export function WorkflowDetail({ execution }: WorkflowDetailProps): RawHtml {
                 <h2 className="text-sm font-medium text-gray-900 mb-2">Clocks</h2>
                 <ul className="space-y-2">
                   {clocks.map((clock) => (
-                    <li
-                      key={clock.name}
-                      className="flex items-center justify-between text-sm"
-                    >
+                    <li key={clock.name} className="flex items-center justify-between text-sm">
                       <span className="flex items-center gap-2">
                         {clock.completed ? (
                           <span className="text-green-600">&#10003;</span>
@@ -193,9 +165,7 @@ export function WorkflowDetail({ execution }: WorkflowDetailProps): RawHtml {
                         <span className="font-mono">{clock.name}</span>
                       </span>
                       <span className="text-gray-500">
-                        {clock.completed
-                          ? "completed"
-                          : `wakes at ${formatDate(clock.wakeAt)}`}
+                        {clock.completed ? "completed" : `wakes at ${formatDate(clock.wakeAt)}`}
                       </span>
                     </li>
                   ))}
@@ -205,9 +175,7 @@ export function WorkflowDetail({ execution }: WorkflowDetailProps): RawHtml {
 
             {state.result !== undefined && (
               <div className="px-6 py-4 border-b border-gray-200">
-                <h2 className="text-sm font-medium text-green-800 mb-2">
-                  Result
-                </h2>
+                <h2 className="text-sm font-medium text-green-800 mb-2">Result</h2>
                 <pre className="bg-green-50 p-3 rounded text-xs overflow-x-auto">
                   {formatJson(state.result)}
                 </pre>
@@ -227,10 +195,7 @@ export function WorkflowDetail({ execution }: WorkflowDetailProps): RawHtml {
               state.status !== "failed" &&
               state.status !== "interrupted" && (
                 <div className="px-6 py-4">
-                  <form
-                    method="post"
-                    action={`/workflows/${state.executionId}/cancel`}
-                  >
+                  <form method="post" action={`/workflows/${state.executionId}/cancel`}>
                     <button
                       type="submit"
                       className="px-4 py-2 bg-red-600 text-white text-sm rounded-md hover:bg-red-700"
@@ -244,5 +209,5 @@ export function WorkflowDetail({ execution }: WorkflowDetailProps): RawHtml {
         </div>
       </div>
     </Layout>
-  )
+  );
 }

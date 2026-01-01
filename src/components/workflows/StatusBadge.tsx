@@ -1,7 +1,7 @@
-import { jsx, RawHtml } from "../../jsx-runtime"
+import { jsx, RawHtml } from "../../jsx-runtime";
 
 interface StatusBadgeProps {
-  status: string
+  status: string;
 }
 
 export function StatusBadge({ status }: StatusBadgeProps): RawHtml {
@@ -11,9 +11,9 @@ export function StatusBadge({ status }: StatusBadgeProps): RawHtml {
     done: "bg-green-100 text-green-800",
     failed: "bg-red-100 text-red-800",
     interrupted: "bg-gray-100 text-gray-800",
-  }
+  };
 
-  const colorClass = colors[status] || "bg-gray-100 text-gray-800"
+  const colorClass = colors[status] || "bg-gray-100 text-gray-800";
 
   return (
     <span
@@ -21,5 +21,5 @@ export function StatusBadge({ status }: StatusBadgeProps): RawHtml {
     >
       {status}
     </span>
-  )
+  );
 }

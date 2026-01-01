@@ -28,4 +28,7 @@ class WorkflowsGroup extends HttpApiGroup.make("workflows")
   ) {}
 
 // Top-level API definition combining all groups
-export class AppApi extends HttpApi.make("app").add(CounterGroup).add(DocsGroup).add(WorkflowsGroup) {}
+export class AppApi extends HttpApi.make("app")
+  .add(CounterGroup)
+  .add(DocsGroup)
+  .add(WorkflowsGroup) {}

@@ -1,16 +1,13 @@
-import { jsx, RawHtml } from "../../jsx-runtime"
-import { Layout } from "../Layout"
-import type { AvailableWorkflow } from "../../services/WorkflowService"
+import { jsx, RawHtml } from "../../jsx-runtime";
+import { Layout } from "../Layout";
+import type { AvailableWorkflow } from "../../services/WorkflowService";
 
 interface WorkflowStartFormProps {
-  workflows: AvailableWorkflow[]
-  error?: string
+  workflows: AvailableWorkflow[];
+  error?: string;
 }
 
-export function WorkflowStartForm({
-  workflows,
-  error,
-}: WorkflowStartFormProps): RawHtml {
+export function WorkflowStartForm({ workflows, error }: WorkflowStartFormProps): RawHtml {
   const defaultPayload = JSON.stringify(
     {
       orderId: `ORD-${Date.now()}`,
@@ -18,27 +15,22 @@ export function WorkflowStartForm({
       items: [{ productId: "PROD-001", quantity: 2 }],
     },
     null,
-    2
-  )
+    2,
+  );
 
   return (
     <Layout title="Start Workflow">
       <div className="min-h-screen bg-gray-50 py-8">
         <div className="max-w-2xl mx-auto px-4">
           <div className="mb-4">
-            <a
-              href="/workflows"
-              className="text-blue-600 hover:underline text-sm"
-            >
+            <a href="/workflows" className="text-blue-600 hover:underline text-sm">
               &larr; Back to list
             </a>
           </div>
 
           <div className="bg-white shadow rounded-lg overflow-hidden">
             <div className="px-6 py-4 border-b border-gray-200">
-              <h1 className="text-xl font-bold text-gray-900">
-                Start New Workflow
-              </h1>
+              <h1 className="text-xl font-bold text-gray-900">Start New Workflow</h1>
             </div>
 
             {error && (
@@ -69,10 +61,7 @@ export function WorkflowStartForm({
               </div>
 
               <div className="mb-4">
-                <label
-                  htmlFor="payload"
-                  className="block text-sm font-medium text-gray-700 mb-1"
-                >
+                <label htmlFor="payload" className="block text-sm font-medium text-gray-700 mb-1">
                   Payload (JSON)
                 </label>
                 <textarea
@@ -99,5 +88,5 @@ export function WorkflowStartForm({
         </div>
       </div>
     </Layout>
-  )
+  );
 }

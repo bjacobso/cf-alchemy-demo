@@ -1,27 +1,27 @@
-import { jsx, RawHtml } from "../../jsx-runtime"
-import { Layout } from "../Layout"
-import { StatusBadge } from "./StatusBadge"
-import type { IndexEntry } from "../../durable-objects/WorkflowIndex"
+import { jsx, RawHtml } from "../../jsx-runtime";
+import { Layout } from "../Layout";
+import { StatusBadge } from "./StatusBadge";
+import type { IndexEntry } from "../../durable-objects/WorkflowIndex";
 
 interface WorkflowListProps {
-  executions: IndexEntry[]
+  executions: IndexEntry[];
 }
 
 function formatTime(timestamp: number): string {
-  const date = new Date(timestamp)
-  const now = Date.now()
-  const diff = now - timestamp
+  const date = new Date(timestamp);
+  const now = Date.now();
+  const diff = now - timestamp;
 
   if (diff < 60000) {
-    return "just now"
+    return "just now";
   } else if (diff < 3600000) {
-    const mins = Math.floor(diff / 60000)
-    return `${mins} min${mins > 1 ? "s" : ""} ago`
+    const mins = Math.floor(diff / 60000);
+    return `${mins} min${mins > 1 ? "s" : ""} ago`;
   } else if (diff < 86400000) {
-    const hours = Math.floor(diff / 3600000)
-    return `${hours} hr${hours > 1 ? "s" : ""} ago`
+    const hours = Math.floor(diff / 3600000);
+    return `${hours} hr${hours > 1 ? "s" : ""} ago`;
   }
-  return date.toLocaleDateString()
+  return date.toLocaleDateString();
 }
 
 export function WorkflowList({ executions }: WorkflowListProps): RawHtml {
@@ -30,9 +30,7 @@ export function WorkflowList({ executions }: WorkflowListProps): RawHtml {
       <div className="min-h-screen bg-gray-50 py-8">
         <div className="max-w-6xl mx-auto px-4">
           <div className="flex justify-between items-center mb-6">
-            <h1 className="text-2xl font-bold text-gray-900">
-              Workflow Executions
-            </h1>
+            <h1 className="text-2xl font-bold text-gray-900">Workflow Executions</h1>
             <a
               href="/workflows/start"
               className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700"
@@ -102,5 +100,5 @@ export function WorkflowList({ executions }: WorkflowListProps): RawHtml {
         </div>
       </div>
     </Layout>
-  )
+  );
 }
