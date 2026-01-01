@@ -12,7 +12,7 @@ concurrency:
   cancel-in-progress: false
 
 env:
-  STAGE: ${{ github.event_name == 'pull_request' && format('pr-{0}', github.event.number) || (github.ref == 'refs/heads/main' && 'prod' || github.ref_name) }}
+  STAGE: ${{ github.event_name == 'pull_request' && format('pr-{0}', github.event.number) || (github.ref == 'refs/heads/main' && 'main' || github.ref_name) }}
 
 jobs:
   deploy:
@@ -60,8 +60,8 @@ jobs:
         run: npm ci
       - name: Safety Check
         run: |-
-          if [ "${{ env.STAGE }}" = "prod" ]; then
-            echo "ERROR: Cannot destroy prod environment in cleanup job"
+          if [ "${{ env.STAGE }}" = "main" ]; then
+            echo "ERROR: Cannot destroy main environment in cleanup job"
             exit 1
           fi
       - name: Destroy Preview Environment
