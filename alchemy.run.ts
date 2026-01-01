@@ -35,7 +35,7 @@ const counter = DurableObjectNamespace("counter", {
 const semaphore = DurableObjectNamespace("semaphore", {
   className: "Semaphore",
   sqlite: true,
-})
+});
 
 // Worker name includes stage to avoid conflicts between environments
 const workerName = stage === "prod" ? "alchemy-do-demo" : `alchemy-do-demo-${stage}`;
