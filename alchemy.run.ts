@@ -1,3 +1,4 @@
+import "dotenv/config"
 import { execSync } from "child_process"
 import alchemy from "alchemy"
 import { Worker, DurableObjectNamespace } from "alchemy/cloudflare"
