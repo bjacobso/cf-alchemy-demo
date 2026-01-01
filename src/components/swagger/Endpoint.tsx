@@ -1,19 +1,22 @@
-import { jsx, Fragment, RawHtml } from "../../jsx-runtime"
-import type { Operation, Components, HttpMethod } from "./types"
-import { SchemaView } from "./SchemaView"
+import { jsx, Fragment, RawHtml } from "../../jsx-runtime";
+import type { Operation, Components, HttpMethod } from "./types";
+import { SchemaView } from "./SchemaView";
 
 interface Props {
-  path: string
-  method: HttpMethod
-  operation: Operation
-  components: Components | undefined
+  path: string;
+  method: HttpMethod;
+  operation: Operation;
+  components: Components | undefined;
 }
 
-const methodColors: Record<HttpMethod, {
-  bg: string
-  border: string
-  badge: string
-}> = {
+const methodColors: Record<
+  HttpMethod,
+  {
+    bg: string;
+    border: string;
+    badge: string;
+  }
+> = {
   get: {
     bg: "bg-green-50",
     border: "border-l-green-500",
@@ -31,15 +34,10 @@ const methodColors: Record<HttpMethod, {
     border: "border-l-teal-500",
     badge: "bg-teal-500",
   },
-}
+};
 
-export function Endpoint({
-  path,
-  method,
-  operation,
-  components,
-}: Props): RawHtml {
-  const colors = methodColors[method]
+export function Endpoint({ path, method, operation, components }: Props): RawHtml {
+  const colors = methodColors[method];
 
   return (
     <details className="border border-gray-200 rounded overflow-hidden">
@@ -51,19 +49,13 @@ export function Endpoint({
         >
           {method}
         </span>
-        <span className="font-mono text-sm font-semibold text-gray-800">
-          {path}
-        </span>
+        <span className="font-mono text-sm font-semibold text-gray-800">{path}</span>
         {operation.summary && (
-          <span className="text-gray-500 text-sm ml-auto">
-            {operation.summary}
-          </span>
+          <span className="text-gray-500 text-sm ml-auto">{operation.summary}</span>
         )}
       </summary>
       <div className="p-4 border-t border-gray-200 bg-white space-y-4">
-        {operation.description && (
-          <p className="text-gray-700">{operation.description}</p>
-        )}
+        {operation.description && <p className="text-gray-700">{operation.description}</p>}
 
         {operation.parameters && operation.parameters.length > 0 && (
           <div>
@@ -83,14 +75,10 @@ export function Endpoint({
                   <tr className="border-t border-gray-100">
                     <td className="p-2 font-mono font-semibold">
                       {param.name}
-                      {param.required && (
-                        <span className="text-red-500 text-xs ml-1">*</span>
-                      )}
+                      {param.required && <span className="text-red-500 text-xs ml-1">*</span>}
                     </td>
                     <td className="p-2 text-gray-600">{param.in}</td>
-                    <td className="p-2 text-gray-600">
-                      {param.description ?? "-"}
-                    </td>
+                    <td className="p-2 text-gray-600">{param.description ?? "-"}</td>
                   </tr>
                 ))}
               </tbody>
@@ -104,17 +92,10 @@ export function Endpoint({
               Request Body
             </h4>
             {operation.requestBody.description && (
-              <p className="text-gray-600 text-sm mb-2">
-                {operation.requestBody.description}
-              </p>
+              <p className="text-gray-600 text-sm mb-2">{operation.requestBody.description}</p>
             )}
-            <div className="text-xs text-gray-400 font-mono mb-1">
-              application/json
-            </div>
-            <SchemaView
-              content={operation.requestBody.content}
-              components={components}
-            />
+            <div className="text-xs text-gray-400 font-mono mb-1">application/json</div>
+            <SchemaView content={operation.requestBody.content} components={components} />
           </div>
         )}
 
@@ -138,14 +119,9 @@ export function Endpoint({
                 >
                   {code}
                 </span>
-                <span className="text-gray-700 flex-1">
-                  {response.description}
-                </span>
+                <span className="text-gray-700 flex-1">{response.description}</span>
                 {response.content && (
-                  <SchemaView
-                    content={response.content}
-                    components={components}
-                  />
+                  <SchemaView content={response.content} components={components} />
                 )}
               </div>
             ))}
@@ -153,5 +129,5 @@ export function Endpoint({
         </div>
       </div>
     </details>
-  )
+  );
 }
