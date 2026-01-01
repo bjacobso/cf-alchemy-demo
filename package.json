@@ -6,7 +6,10 @@
     "postinstall": "ln -sf ../../../libsodium/dist/modules-esm/libsodium.mjs node_modules/libsodium-wrappers/dist/modules-esm/libsodium.mjs 2>/dev/null || true",
     "dev": "npx tsx alchemy.run.ts",
     "deploy": "npx tsx alchemy.run.ts",
-    "lint": "eslint .",
+    "lint": "oxlint",
+    "lint:fix": "oxlint --fix",
+    "format": "oxfmt --write .",
+    "format:check": "oxfmt --check .",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
@@ -16,11 +19,9 @@
   "devDependencies": {
     "@cloudflare/workers-types": "^4",
     "@types/node": "^25.0.3",
-    "@typescript-eslint/eslint-plugin": "^8",
-    "@typescript-eslint/parser": "^8",
-    "eslint": "^9",
+    "oxfmt": "^0.1",
+    "oxlint": "^1",
     "tsx": "^4",
-    "typescript": "^5",
-    "typescript-eslint": "^8.51.0"
+    "typescript": "^5"
   }
 }
