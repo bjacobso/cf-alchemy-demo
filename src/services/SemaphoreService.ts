@@ -51,7 +51,9 @@ interface ISemaphoreService {
     options?: TryAcquireOptions,
   ) => Effect.Effect<PermitHandle, SemaphoreRejectedError>
 
-  withPermit: <A, E, R>(
+  withPermit: <A,
+  E,
+  R,>(
     key: string,
     effect: Effect.Effect<A, E, R>,
     options?: AcquireOptions,
@@ -65,10 +67,9 @@ interface ISemaphoreService {
   ) => Effect.Effect<void, SemaphoreReleaseError>
 }
 
-export class SemaphoreService extends Context.Tag("SemaphoreService")<
-  SemaphoreService,
-  ISemaphoreService
->() {}
+export class SemaphoreService extends Context.Tag(
+  "SemaphoreService",
+)<SemaphoreService, ISemaphoreService>() {}
 
 export const SemaphoreServiceLive = Layer.effect(
   SemaphoreService,
@@ -133,8 +134,8 @@ export const SemaphoreServiceLive = Layer.effect(
 
       acquire: (key, options) =>
         Effect.gen(function* () {
-          const result: AcquireResult = yield* Effect.tryPromise(
-            async () => getStub(key).acquire(options?.timeoutMs, options?.permitTTLMs),
+          const result: AcquireResult = yield* Effect.tryPromise(async () =>
+            getStub(key).acquire(options?.timeoutMs, options?.permitTTLMs),
           ).pipe(Effect.orDie)
 
           if (result.success) {
@@ -164,16 +165,15 @@ export const SemaphoreServiceLive = Layer.effect(
                       release: makeReleaser(key, checkResult.permitId),
                     })
                   : checkResult.reason === "timeout"
-                    ? Effect.fail(
-                        new SemaphoreTimeoutError({ key, timeoutMs }),
-                      )
+                    ? Effect.fail(new SemaphoreTimeoutError({ key, timeoutMs }))
                     : Effect.fail(new Error("still_waiting")),
               ),
               Effect.retry(
                 Schedule.spaced(Duration.millis(pollInterval)).pipe(
                   Schedule.whileInput(
                     (e: unknown) =>
-                      e instanceof Error && (e as Error).message === "still_waiting",
+                      e instanceof Error &&
+                      (e as Error).message === "still_waiting",
                   ),
                   Schedule.compose(
                     Schedule.elapsed.pipe(

@@ -19,11 +19,13 @@ interface QueuedWaiter {
   permitTTLMs: number
 }
 
-export type AcquireResult =
-  | { success: true; permitId: string; expiresAt: number }
-  | { success: false; reason: "timeout" | "rejected"; waiterId?: string }
+export type AcquireResult = {
+  success: true
+  permitId: string
+  expiresAt: number
+} | { success: false reason: "timeout" | "rejected" waiterId?: string }
 
-export type ReleaseResult = { success: boolean; error?: string }
+export type ReleaseResult = { success: boolean error?: string }
 
 export interface SemaphoreStatus {
   available: number

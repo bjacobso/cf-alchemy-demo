@@ -22,7 +22,4 @@ export class SemaphoreReleaseError extends Data.TaggedError(
   message: string
 }> {}
 
-export type SemaphoreError =
-  | SemaphoreTimeoutError
-  | SemaphoreRejectedError
-  | SemaphoreReleaseError
+export type SemaphoreError = SemaphoreTimeoutError | SemaphoreRejectedError | SemaphoreReleaseError
