@@ -2,6 +2,7 @@ import { HttpApiBuilder, HttpServer } from "@effect/platform"
 import { Layer } from "effect"
 import { AppApi } from "./api/api"
 import { CounterHandlerLive } from "./handlers/counter"
+import { DocsHandlerLive } from "./handlers/docs"
 import { CounterServiceLive } from "./services/CounterService"
 import { makeEnvLayer, type Env } from "./services/CloudflareEnv"
 
@@ -12,6 +13,7 @@ export const makeHandler = (env: Env) => {
   // Compose all layers: API handlers -> Services -> Env bindings
   const ApiLive = HttpApiBuilder.api(AppApi).pipe(
     Layer.provide(CounterHandlerLive),
+    Layer.provide(DocsHandlerLive),
     Layer.provide(CounterServiceLive),
     Layer.provide(EnvLayer),
   )
