@@ -89,7 +89,8 @@ export const WorkflowServiceLive = Layer.effect(
                   updatedAt: number;
                 }
               | undefined;
-            activities: Map<
+            // After RPC serialization, Maps become plain objects
+            activities: Record<
               string,
               {
                 name: string;
@@ -99,25 +100,25 @@ export const WorkflowServiceLive = Layer.effect(
                 error?: unknown;
               }
             >;
-            deferreds: Map<string, { name: string; resolved: boolean; value?: unknown }>;
-            clocks: Map<string, { name: string; wakeAt: number; completed: boolean }>;
+            deferreds: Record<string, { name: string; resolved: boolean; value?: unknown }>;
+            clocks: Record<string, { name: string; wakeAt: number; completed: boolean }>;
           };
 
           return {
             state: fullState.state,
-            activities: Array.from(fullState.activities.values()).map((a) => ({
+            activities: Object.values(fullState.activities || {}).map((a) => ({
               name: a.name,
               status: a.status,
               attempts: a.attempts,
               result: a.result,
               error: a.error,
             })),
-            deferreds: Array.from(fullState.deferreds.values()).map((d) => ({
+            deferreds: Object.values(fullState.deferreds || {}).map((d) => ({
               name: d.name,
               resolved: d.resolved,
               value: d.value,
             })),
-            clocks: Array.from(fullState.clocks.values()).map((c) => ({
+            clocks: Object.values(fullState.clocks || {}).map((c) => ({
               name: c.name,
               wakeAt: c.wakeAt,
               completed: c.completed,
