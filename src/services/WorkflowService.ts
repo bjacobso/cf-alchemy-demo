@@ -1,4 +1,5 @@
 import { Effect, Context, Layer, Exit, Schema } from "effect";
+import { WorkflowEngine } from "@effect/workflow";
 import { CloudflareEnv } from "./CloudflareEnv";
 import type { IndexEntry } from "../durable-objects/WorkflowIndex";
 import {
@@ -8,6 +9,7 @@ import {
   type DeferredEntry,
   type ClockEntry,
 } from "../workflow/schemas";
+import { OrderWorkflow } from "../workflows/OrderWorkflow";
 
 // Decoder for validating RPC response
 const decodeFullState = Schema.decodeUnknownSync(FullState);
@@ -47,6 +49,7 @@ export const WorkflowServiceLive = Layer.effect(
   WorkflowService,
   Effect.gen(function* () {
     const env = yield* CloudflareEnv;
+    const engine = yield* WorkflowEngine.WorkflowEngine;
 
     // Get the global index stub
     const getIndexStub = () => env.WORKFLOW_INDEX.get(env.WORKFLOW_INDEX.idFromName("global"));
@@ -80,10 +83,20 @@ export const WorkflowServiceLive = Layer.effect(
         }).pipe(Effect.orDie),
 
       startExecution: (workflowName: string, payload: unknown) =>
-        Effect.tryPromise(async () => {
+        Effect.gen(function* () {
           const executionId = crypto.randomUUID();
-          const stub = getExecutionStub(executionId);
-          await stub.execute(executionId, workflowName, payload);
+
+          // Execute workflow through the engine (fire-and-forget with discard: true)
+          yield* engine.execute(OrderWorkflow, {
+            executionId,
+            payload: payload as {
+              orderId: string;
+              customerId: string;
+              items: { productId: string; quantity: number }[];
+            },
+            discard: true,
+          });
+
           return executionId;
         }).pipe(Effect.orDie),
 
