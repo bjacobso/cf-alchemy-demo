@@ -72,7 +72,7 @@ export function hasErrors<T>(state: FormState<T> | undefined): boolean {
 /** Get errors for a specific field */
 export function getFieldErrors<T>(
   state: FormState<T> | undefined,
-  field: keyof T
+  field: keyof T,
 ): readonly string[] | undefined {
   return state?.errors[field];
 }

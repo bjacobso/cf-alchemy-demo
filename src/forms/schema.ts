@@ -35,7 +35,7 @@ export function TextField(
     placeholder?: string;
     minLength?: number;
     maxLength?: number;
-  }
+  },
 ) {
   let schema = Schema.String;
 
@@ -59,10 +59,10 @@ export function EmailField(
   label: string,
   options?: {
     placeholder?: string;
-  }
+  },
 ) {
   return Schema.String.pipe(
-    Schema.pattern(/^[^\s@]+@[^\s@]+\.[^\s@]+$/, { message: () => "Invalid email address" })
+    Schema.pattern(/^[^\s@]+@[^\s@]+\.[^\s@]+$/, { message: () => "Invalid email address" }),
   ).annotations({
     [FieldTypeId]: "email" as FieldType,
     [LabelId]: label,
@@ -76,11 +76,11 @@ export function PasswordField(
   options?: {
     minLength?: number;
     placeholder?: string;
-  }
+  },
 ) {
   const minLen = options?.minLength ?? 8;
   return Schema.String.pipe(
-    Schema.minLength(minLen, { message: () => `Password must be at least ${minLen} characters` })
+    Schema.minLength(minLen, { message: () => `Password must be at least ${minLen} characters` }),
   ).annotations({
     [FieldTypeId]: "password" as FieldType,
     [LabelId]: label,
@@ -95,7 +95,7 @@ export function NumberField(
     min?: number;
     max?: number;
     placeholder?: string;
-  }
+  },
 ) {
   // Start with NumberFromString and chain filters
   const base = Schema.NumberFromString;
@@ -103,8 +103,10 @@ export function NumberField(
   if (options?.min !== undefined && options?.max !== undefined) {
     return base
       .pipe(
-        Schema.greaterThanOrEqualTo(options.min, { message: () => `Must be at least ${options.min}` }),
-        Schema.lessThanOrEqualTo(options.max, { message: () => `Must be at most ${options.max}` })
+        Schema.greaterThanOrEqualTo(options.min, {
+          message: () => `Must be at least ${options.min}`,
+        }),
+        Schema.lessThanOrEqualTo(options.max, { message: () => `Must be at most ${options.max}` }),
       )
       .annotations({
         [FieldTypeId]: "number" as FieldType,
@@ -113,7 +115,11 @@ export function NumberField(
       });
   } else if (options?.min !== undefined) {
     return base
-      .pipe(Schema.greaterThanOrEqualTo(options.min, { message: () => `Must be at least ${options.min}` }))
+      .pipe(
+        Schema.greaterThanOrEqualTo(options.min, {
+          message: () => `Must be at least ${options.min}`,
+        }),
+      )
       .annotations({
         [FieldTypeId]: "number" as FieldType,
         [LabelId]: label,
@@ -121,7 +127,9 @@ export function NumberField(
       });
   } else if (options?.max !== undefined) {
     return base
-      .pipe(Schema.lessThanOrEqualTo(options.max, { message: () => `Must be at most ${options.max}` }))
+      .pipe(
+        Schema.lessThanOrEqualTo(options.max, { message: () => `Must be at most ${options.max}` }),
+      )
       .annotations({
         [FieldTypeId]: "number" as FieldType,
         [LabelId]: label,
@@ -153,7 +161,10 @@ export function CheckboxField(label: string) {
 }
 
 /** Select dropdown field */
-export function SelectField<T extends string>(label: string, options: readonly { value: T; label: string }[]) {
+export function SelectField<T extends string>(
+  label: string,
+  options: readonly { value: T; label: string }[],
+) {
   const values = options.map((o) => o.value) as [T, ...T[]];
   return Schema.Literal(...values).annotations({
     [FieldTypeId]: "select" as FieldType,
@@ -169,7 +180,7 @@ export function TextareaField(
     placeholder?: string;
     minLength?: number;
     maxLength?: number;
-  }
+  },
 ) {
   let schema = Schema.String;
 
@@ -200,10 +211,12 @@ export function UrlField(
   label: string,
   options?: {
     placeholder?: string;
-  }
+  },
 ) {
   return Schema.String.pipe(
-    Schema.pattern(/^https?:\/\/.+/, { message: () => "Must be a valid URL starting with http:// or https://" })
+    Schema.pattern(/^https?:\/\/.+/, {
+      message: () => "Must be a valid URL starting with http:// or https://",
+    }),
   ).annotations({
     [FieldTypeId]: "url" as FieldType,
     [LabelId]: label,
@@ -216,7 +229,7 @@ export function TelField(
   label: string,
   options?: {
     placeholder?: string;
-  }
+  },
 ) {
   return Schema.String.annotations({
     [FieldTypeId]: "tel" as FieldType,
@@ -228,7 +241,7 @@ export function TelField(
 /** Date input field */
 export function DateField(label: string) {
   return Schema.String.pipe(
-    Schema.pattern(/^\d{4}-\d{2}-\d{2}$/, { message: () => "Must be a valid date" })
+    Schema.pattern(/^\d{4}-\d{2}-\d{2}$/, { message: () => "Must be a valid date" }),
   ).annotations({
     [FieldTypeId]: "date" as FieldType,
     [LabelId]: label,

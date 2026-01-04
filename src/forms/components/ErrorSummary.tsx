@@ -12,8 +12,9 @@ export function ErrorSummary<T>({
 }: ErrorSummaryProps<T>): RawHtml {
   if (!errors) return <Fragment />;
 
-  const allErrors = Object.entries(errors).flatMap(([field, fieldErrors]) =>
-    (fieldErrors as string[] | undefined)?.map((e) => ({ field, message: e })) ?? []
+  const allErrors = Object.entries(errors).flatMap(
+    ([field, fieldErrors]) =>
+      (fieldErrors as string[] | undefined)?.map((e) => ({ field, message: e })) ?? [],
   );
 
   if (allErrors.length === 0) return <Fragment />;

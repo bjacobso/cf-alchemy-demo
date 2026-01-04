@@ -19,4 +19,7 @@ class ContactGroup extends HttpApiGroup.make("contact")
   .add(HttpApiEndpoint.get("getContactSuccess", "/contact/success").addSuccess(Schema.String)) {}
 
 // Top-level API definition combining all groups
-export class AppApi extends HttpApi.make("app").add(CounterGroup).add(DocsGroup).add(ContactGroup) {}
+export class AppApi extends HttpApi.make("app")
+  .add(CounterGroup)
+  .add(DocsGroup)
+  .add(ContactGroup) {}

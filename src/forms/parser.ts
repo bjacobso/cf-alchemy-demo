@@ -41,7 +41,7 @@ export function formDataToObject(formData: FormData): Record<string, unknown> {
 /** Parse FormData with Effect Schema, returning typed result or FormState with errors */
 export function parseFormData<A, I, R>(
   schema: Schema.Schema<A, I, R>,
-  formData: FormData
+  formData: FormData,
 ): Effect.Effect<A, FormState<A>, R> {
   const rawData = formDataToObject(formData);
 
@@ -53,14 +53,14 @@ export function parseFormData<A, I, R>(
         errors,
         touched: new Set(Object.keys(rawData) as (keyof A)[]),
       };
-    })
+    }),
   );
 }
 
 /** Synchronous version returning Either */
 export function parseFormDataSync<A, I>(
   schema: Schema.Schema<A, I, never>,
-  formData: FormData
+  formData: FormData,
 ): Either.Either<A, FormState<A>> {
   const rawData = formDataToObject(formData);
 

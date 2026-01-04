@@ -12,7 +12,7 @@ export const ContactHandlerLive = HttpApiBuilder.group(AppApi, "contact", (handl
       Effect.sync(() => {
         const html = "<!DOCTYPE html>" + ContactPage({});
         return HttpServerResponse.html(html);
-      })
+      }),
     )
     .handleRaw("submitContact", () =>
       Effect.gen(function* () {
@@ -42,7 +42,7 @@ export const ContactHandlerLive = HttpApiBuilder.group(AppApi, "contact", (handl
               // POST/redirect/GET pattern
               return HttpServerResponse.redirect("/contact/success", { status: 303 });
             },
-          })
+          }),
         );
 
         return parseResult;
@@ -50,18 +50,21 @@ export const ContactHandlerLive = HttpApiBuilder.group(AppApi, "contact", (handl
         // Handle any unexpected errors by showing a generic error page
         Effect.catchAll(() =>
           Effect.succeed(
-            HttpServerResponse.text("<!DOCTYPE html><html><body>Error processing form</body></html>", {
-              contentType: "text/html",
-              status: 500,
-            })
-          )
-        )
-      )
+            HttpServerResponse.text(
+              "<!DOCTYPE html><html><body>Error processing form</body></html>",
+              {
+                contentType: "text/html",
+                status: 500,
+              },
+            ),
+          ),
+        ),
+      ),
     )
     .handleRaw("getContactSuccess", () =>
       Effect.sync(() => {
         const html = "<!DOCTYPE html>" + ContactSuccessPage();
         return HttpServerResponse.html(html);
-      })
-    )
+      }),
+    ),
 );
