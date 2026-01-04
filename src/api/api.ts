@@ -12,5 +12,11 @@ class DocsGroup extends HttpApiGroup.make("docs")
   .add(HttpApiEndpoint.get("getOpenApiSpec", "/docs.json").addSuccess(Schema.Unknown))
   .add(HttpApiEndpoint.get("getDocs", "/docs").addSuccess(Schema.String)) {}
 
+// Contact form API group
+class ContactGroup extends HttpApiGroup.make("contact")
+  .add(HttpApiEndpoint.get("getContactPage", "/contact").addSuccess(Schema.String))
+  .add(HttpApiEndpoint.post("submitContact", "/contact").addSuccess(Schema.Void))
+  .add(HttpApiEndpoint.get("getContactSuccess", "/contact/success").addSuccess(Schema.String)) {}
+
 // Top-level API definition combining all groups
-export class AppApi extends HttpApi.make("app").add(CounterGroup).add(DocsGroup) {}
+export class AppApi extends HttpApi.make("app").add(CounterGroup).add(DocsGroup).add(ContactGroup) {}
