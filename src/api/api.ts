@@ -1,5 +1,6 @@
 import { HttpApi, HttpApiEndpoint, HttpApiGroup } from "@effect/platform";
 import { Schema } from "effect";
+import { SemaphoreGroup } from "./semaphore";
 
 // Counter API group - handles all counter-related endpoints
 class CounterGroup extends HttpApiGroup.make("counter")
@@ -13,4 +14,7 @@ class DocsGroup extends HttpApiGroup.make("docs")
   .add(HttpApiEndpoint.get("getDocs", "/docs").addSuccess(Schema.String)) {}
 
 // Top-level API definition combining all groups
-export class AppApi extends HttpApi.make("app").add(CounterGroup).add(DocsGroup) {}
+export class AppApi extends HttpApi.make("app")
+  .add(CounterGroup)
+  .add(DocsGroup)
+  .add(SemaphoreGroup) {}
