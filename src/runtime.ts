@@ -3,6 +3,7 @@ import { Layer } from "effect";
 import { AppApi } from "./api/api";
 import { CounterHandlerLive } from "./handlers/counter";
 import { DocsHandlerLive } from "./handlers/docs";
+import { ContactHandlerLive } from "./handlers/contact";
 import { CounterServiceLive } from "./services/CounterService";
 import { makeEnvLayer, type Env } from "./services/CloudflareEnv";
 
@@ -14,6 +15,7 @@ export const makeHandler = (env: Env) => {
   const ApiLive = HttpApiBuilder.api(AppApi).pipe(
     Layer.provide(CounterHandlerLive),
     Layer.provide(DocsHandlerLive),
+    Layer.provide(ContactHandlerLive),
     Layer.provide(CounterServiceLive),
     Layer.provide(EnvLayer),
   );
