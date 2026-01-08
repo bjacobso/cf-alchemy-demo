@@ -1,27 +1,23 @@
-import { jsx, RawHtml } from "../jsx-runtime";
 import type { OpenAPISpec, EndpointInfo, HttpMethod } from "./swagger/types";
-import { Layout } from "./Layout";
 import { ApiInfo } from "./swagger/ApiInfo";
 import { TagGroup } from "./swagger/TagGroup";
 
-interface SwaggerUIProps {
+export interface SwaggerUIProps {
   spec: OpenAPISpec;
 }
 
-export function SwaggerUI({ spec }: SwaggerUIProps): RawHtml {
+export function SwaggerUI({ spec }: SwaggerUIProps) {
   const endpointsByTag = groupEndpointsByTag(spec);
 
   return (
-    <Layout title={`${spec.info.title} - API Docs`}>
-      <div className="max-w-5xl mx-auto p-8 bg-gray-50 min-h-screen">
-        <ApiInfo info={spec.info} />
-        <div className="space-y-4">
-          {Object.entries(endpointsByTag).map(([tag, endpoints]) => (
-            <TagGroup tagName={tag} endpoints={endpoints} components={spec.components} />
-          ))}
-        </div>
+    <div className="max-w-5xl mx-auto p-8 bg-gray-50 min-h-screen">
+      <ApiInfo info={spec.info} />
+      <div className="space-y-4">
+        {Object.entries(endpointsByTag).map(([tag, endpoints]) => (
+          <TagGroup key={tag} tagName={tag} endpoints={endpoints} components={spec.components} />
+        ))}
       </div>
-    </Layout>
+    </div>
   );
 }
 

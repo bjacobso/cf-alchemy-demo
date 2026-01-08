@@ -5,8 +5,11 @@
   "scripts": {
     "postinstall": "bash -c 'src=$(echo node_modules/.pnpm/libsodium@*/node_modules/libsodium/dist/modules-esm/libsodium.mjs) && dst=$(echo node_modules/.pnpm/libsodium-wrappers@*/node_modules/libsodium-wrappers/dist/modules-esm) && cp \"$src\" \"$dst/libsodium.mjs\"' 2>/dev/null || true",
     "build:css": "pnpm exec tsx scripts/build-css.ts",
-    "dev": "pnpm build:css && pnpm exec tsx alchemy.run.ts",
-    "deploy": "pnpm build:css && pnpm exec tsx alchemy.run.ts",
+    "build:client": "vite build --config vite.client.config.ts && pnpm exec tsx scripts/embed-client.ts",
+    "build:server": "vite build --config vite.server.config.ts",
+    "build": "pnpm run build:css && pnpm run build:client && pnpm run build:server",
+    "dev": "pnpm run build && pnpm exec tsx alchemy.run.ts",
+    "deploy": "pnpm run build && pnpm exec tsx alchemy.run.ts",
     "lint": "oxlint",
     "lint:fix": "oxlint --fix",
     "format": "oxfmt --write .",
@@ -24,18 +27,24 @@
     "alchemy": "latest",
     "dotenv": "17.2.3",
     "effect": "3.19.14",
-    "libsodium": "0.7.16"
+    "libsodium": "0.7.16",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4",
     "@playwright/test": "1.57.0",
     "@tailwindcss/cli": "4.1.18",
     "@types/node": "25.0.3",
+    "@types/react": "^18.2.0",
+    "@types/react-dom": "^18.2.0",
+    "@vitejs/plugin-react": "^4.2.0",
     "oxfmt": "0.21.0",
     "oxlint": "1.36.0",
     "tailwindcss": "4.1.18",
     "tsx": "4.21.0",
-    "typescript": "5.9.3"
+    "typescript": "5.9.3",
+    "vite": "^6.0.0"
   },
   "packageManager": "pnpm@10.2.0"
 }

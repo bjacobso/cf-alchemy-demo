@@ -52,7 +52,7 @@ jobs:
           cache: "pnpm"
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
-      - name: Build CSS
-        run: pnpm build:css
+      - name: Build
+        run: pnpm build
       - name: Typecheck
         run: pnpm typecheck
