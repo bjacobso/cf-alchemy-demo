@@ -59,7 +59,7 @@ if (process.env.PULL_REQUEST) {
 Built from commit ${process.env.GITHUB_SHA?.slice(0, 7)}
 
 ---
-<time datetime="${new Date().toISOString()}">${new Date().toISOString()}</time>
+<relative-time datetime="${new Date().toISOString()}"></relative-time>
 
 <sub>This comment updates automatically with each push.</sub>`,
   });
